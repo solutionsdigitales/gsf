@@ -1,0 +1,11 @@
+{
+  "name": "ePRF",
+  "scripts": {
+    "dev": "yarn build && node server/app.js",
+    "build": "cd ./client && yarn build",
+    "watch": "cd ./client && yarn serve"
+  },
+  "dependencies": {
+    "nodemon": "^2.0.19"
+  }
+}

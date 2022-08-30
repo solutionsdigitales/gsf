@@ -1,0 +1,21 @@
+# Add any directories, files, or patterns you don't want to be tracked by version control
+
+# ignore npm/node modules
+node_modules/
+./node_modules/
+
+client/bin/
+./client/node_modules/
+
+server/upload
+./server/upload
+
+server/node_modules/
+./server/node_modules/
+
+
+.env
+./.env
+
+npm-shrinkwrap.json
+./npm-shrinkwrap.json
