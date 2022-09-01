@@ -1,0 +1,905 @@
+<!-- this partial requires binding the variable 'title' -->
+<head>
+  <meta charset="utf-8"/>
+  <title>{{translate title}}</title>
+ 
+<style>
+  
+.table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody + tbody {
+  border-top: 2px solid #dee2e6;
+}
+
+.table .table {
+  background-color: #fff;
+}
+
+.table-sm th,
+.table-sm td {
+  padding: 0.3rem;
+}
+
+.table-bordered {
+  border: 1px solid #dee2e6;
+}
+
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid #dee2e6;
+}
+
+.table-bordered thead th,
+.table-bordered thead td {
+  border-bottom-width: 2px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.075);
+}
+
+.table-primary,
+.table-primary > th,
+.table-primary > td {
+  background-color: #b8daff;
+}
+
+.table-hover .table-primary:hover {
+  background-color: #9fcdff;
+}
+
+.table-hover .table-primary:hover > td,
+.table-hover .table-primary:hover > th {
+  background-color: #9fcdff;
+}
+
+.table-secondary,
+.table-secondary > th,
+.table-secondary > td {
+  background-color: #d6d8db;
+}
+
+.table-hover .table-secondary:hover {
+  background-color: #c8cbcf;
+}
+
+.table-hover .table-secondary:hover > td,
+.table-hover .table-secondary:hover > th {
+  background-color: #c8cbcf;
+}
+
+.table-success,
+.table-success > th,
+.table-success > td {
+  background-color: #c3e6cb;
+}
+
+.table-hover .table-success:hover {
+  background-color: #b1dfbb;
+}
+
+.table-hover .table-success:hover > td,
+.table-hover .table-success:hover > th {
+  background-color: #b1dfbb;
+}
+
+.table-info,
+.table-info > th,
+.table-info > td {
+  background-color: #bee5eb;
+}
+
+.table-hover .table-info:hover {
+  background-color: #abdde5;
+}
+
+.table-hover .table-info:hover > td,
+.table-hover .table-info:hover > th {
+  background-color: #abdde5;
+}
+
+.table-warning,
+.table-warning > th,
+.table-warning > td {
+  background-color: #ffeeba;
+}
+
+.table-hover .table-warning:hover {
+  background-color: #ffe8a1;
+}
+
+.table-hover .table-warning:hover > td,
+.table-hover .table-warning:hover > th {
+  background-color: #ffe8a1;
+}
+
+.table-danger,
+.table-danger > th,
+.table-danger > td {
+  background-color: #f5c6cb;
+}
+
+.table-hover .table-danger:hover {
+  background-color: #f1b0b7;
+}
+
+.table-hover .table-danger:hover > td,
+.table-hover .table-danger:hover > th {
+  background-color: #f1b0b7;
+}
+
+.table-light,
+.table-light > th,
+.table-light > td {
+  background-color: #fdfdfe;
+}
+
+.table-hover .table-light:hover {
+  background-color: #ececf6;
+}
+
+.table-hover .table-light:hover > td,
+.table-hover .table-light:hover > th {
+  background-color: #ececf6;
+}
+
+.table-dark,
+.table-dark > th,
+.table-dark > td {
+  background-color: #c6c8ca;
+}
+
+.table-hover .table-dark:hover {
+  background-color: #b9bbbe;
+}
+
+.table-hover .table-dark:hover > td,
+.table-hover .table-dark:hover > th {
+  background-color: #b9bbbe;
+}
+
+.table-active,
+.table-active > th,
+.table-active > td {
+  background-color: rgba(0, 0, 0, 0.075);
+}
+
+.table-hover .table-active:hover {
+  background-color: rgba(0, 0, 0, 0.075);
+}
+
+.table-hover .table-active:hover > td,
+.table-hover .table-active:hover > th {
+  background-color: rgba(0, 0, 0, 0.075);
+}
+
+.table .thead-dark th {
+  color: #fff;
+  background-color: #212529;
+  border-color: #32383e;
+}
+
+.table .thead-light th {
+  color: #495057;
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}
+
+.table-dark {
+  color: #fff;
+  background-color: #212529;
+}
+
+.table-dark th,
+.table-dark td,
+.table-dark thead th {
+  border-color: #32383e;
+}
+
+.table-dark.table-bordered {
+  border: 0;
+}
+
+.table-dark.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.table-dark.table-hover tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.075);
+}
+
+@media (max-width: 575.98px) {
+  .table-responsive-sm {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+  .table-responsive-sm > .table-bordered {
+    border: 0;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .table-responsive-md {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+  .table-responsive-md > .table-bordered {
+    border: 0;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .table-responsive-lg {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+  .table-responsive-lg > .table-bordered {
+    border: 0;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .table-responsive-xl {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+  .table-responsive-xl > .table-bordered {
+    border: 0;
+  }
+}
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.table-responsive > .table-bordered {
+  border: 0;
+}
+
+.grid {
+  width: 100%;
+  height: 600px;
+}
+ .padding10 {
+  padding : 10px !important;
+ }
+.header-filtered {
+  color: blue;
+}
+
+.form {
+  width:100%;
+}
+
+.form tr {
+  height: 41px !important;
+}
+.margin0{
+  margin: 0px !important
+}
+.card {
+  border : 1px solid rgba(0, 0, 0, 0.5);
+  box-shadow: 1px 3px 33px #aaa;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.titre {
+  text-shadow: 1px 1px #aaa;
+  font-weight: bold;
+}
+.short {
+  font-size:12px !important;
+}
+
+
+.seachBox {
+  width : 400px !important
+}
+
+.navbar-nav li a, .appName{
+  color: #fff !important;
+  font-weight: bold;
+}
+
+.logo {
+  padding: 2px;
+}
+
+.appName {
+  font-size: 20px;
+  font-weight: bold;
+}
+.logo img {
+  height: 40px;
+  margin-top: -10px;
+}
+
+.employee_photo {
+  max-width: 100px;
+  max-height: 100px;
+  margin-left: 2px;
+  padding:2px;
+  box-shadow: 0px 2px 3px #001;
+  border-radius: 3px;
+}
+
+.grid-msg-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  background: hsla(0, 0%, 100%, .8)
+}
+
+.grid-msg-overlay .msg {
+  opacity: 1;
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 50%;
+  text-align: center;
+  display: table
+}
+.scrollY {
+  overflow-y: scroll
+}
+
+.grid-msg-overlay .msg>span {
+  display: table-cell;
+  vertical-align: middle
+}
+
+.grid-full-height {
+  width: 100%;
+  height: calc(100vh - 65px)
+}
+
+.required {
+  color:red  !important;
+  font-size: 16px !important;
+  font-weight: bold;
+}
+
+.employee_emprintes {
+  width : 100px !important;
+  height: 100px !important;
+  margin: 2px !important;
+  box-shadow: 1px 2px 1px #001 !important;
+}
+
+.addItem {
+  color:blue;
+  font-size: 16px;
+  cursor: pointer;
+}
+.help {
+  font-size: 12px;
+
+}
+
+.pageView {
+  background-image: url('/assets/images/form_sheetbg.png') ;
+}
+.formBlock {
+  background: #fff  !important; padding:2px;
+  padding-top: 10px;
+  margin-bottom: 10px;
+  box-shadow: 1px 2px 3px #ddd;
+  border-radius: 5px;
+}
+
+.block {
+  border-left: 1px solid rgba(0, 0, 0, 0.07)
+}
+
+.txt {
+  color : #7b9f0e
+}
+.header1 {
+  /*background:  #7b9f0e;*/
+  background:  black;
+   color:#fff
+}
+
+.navbar-nav li .dropdown-menu li a {
+  color: #001  !important;
+}
+
+.navbar-nav li :hover, .navbar-nav li .dropdown-menu:hover {
+  background:transparent !important;
+  color: blue !important;
+}
+.navbar-nav li .dropdown-menu:hover {
+  background: #fafafa !important;
+  box-shadow: 2px 1px 2px #ddd;
+}
+
+* {
+  font-family: adobe clean regular;
+}
+
+.loadingImageBtn {
+  height: 22px !important;
+}
+
+.saveEmployeBtn {
+  width: 200px;
+}
+
+.pictureBlock {
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  padding:10px
+}
+.legendePhoto {
+  max-width: 140px;
+  font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  padding:2px;
+  border-radius: 5px;
+}
+
+.structureLegend {
+  max-width: 200px;
+  font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  padding:2px;
+  border-radius: 5px;
+}
+.structureLegend a span{
+  font-size: 16px;
+  margin-left: 10px;
+}
+.top10{
+  margin-top: 10px !important;
+}
+
+.app-modal-window .modal-dialog {
+  width: 960px;
+}
+
+.marge10{
+  padding: 10px !important;
+}
+
+.dropdown-toggle{
+  cursor: pointer;
+}
+.nav-link {
+  color: #fff !important;
+}
+
+.link {
+  cursor: pointer !important;
+}
+
+.full button span {
+  background-color: limegreen;
+  border-radius: 32px;
+  color: black;
+}
+
+.partially button span {
+  background-color: orange;
+  border-radius: 32px;
+  color: black;
+}
+
+.has-error input, .has-error select{
+  border : 1px solid red !important;
+  color:red !important;
+}
+
+.has-error .radio-inline, .has-error label, .has-error .select2{
+  color:red !important;
+}
+
+
+.main-header {
+  width: 100% !important;
+}
+
+.treeview-menu {
+  list-style-type: none;
+}
+.treeview-menu .radio-inline {
+  min-width: 400px;
+}
+
+.pageDescLink {
+  background: transparent;
+  padding:0px !important; 
+  margin:0px !important
+}
+.pageTitle {
+  margin-top: 15px;
+  font-size: 18px !important;
+}
+.allWidth {
+  width: 100%;
+}
+
+.navigate{
+  border: 1px solid #ddd;
+    padding: 5px!important;
+    border-radius: 13% !important;
+    height: 30px;
+    margin: 0px !important;
+    box-shadow: 0px 2px 3px #001;
+}
+
+.ui-grid-cell-contents{
+  font-size: 13px;
+}
+
+.select2 span, select, input[type='text'], input[type='email'], input[type='number'], input[type='phone']{
+  font-size: 13px;
+}
+.control-label{
+  text-shadow: 1px 0px 0px #ddd;
+}
+
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  cursor: pointer !important;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+  width: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #aaa; 
+  border-radius: 10px;
+  width: 10px;
+  cursor: pointer !important;
+}
+
+
+.btn-arrow {
+  
+  background: #ccc;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #ccc), color-stop(0.6, #eee));
+  background-image: -webkit-linear-gradient(center bottom, #ccc 0%, #eee 60%);
+  background-image: -moz-linear-gradient(center bottom, #ccc 0%, #eee 60%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#eeeeee', endColorstr = '#cccccc', GradientType = 0);
+  background-image: linear-gradient(top, #ccc 0%, #eee 60%);
+}
+
+.reportTable {
+  width: 100%;
+  box-shadow: 1px 2px 3px #aaa;
+}
+.reportTable tr, .reportTable td {
+  border: 1px solid #ddd !important;
+  font-size: 13px;
+  padding : 3px;
+  min-width: 60px;
+}
+
+.reportTable thead tr {
+  text-align: center !important;
+  border: 1px solid #001 !important;
+}
+
+#viewReport {
+  height : 85vh;
+  background: rgba(0, 0, 0, 0.7);
+ 
+    background: rgb(82, 86, 89);
+    width: 100%;
+
+}
+
+#viewReport  iframe {
+  box-shadow: 0px 2px 3px #001;
+  padding: 2px;
+  background: #fff;
+}
+
+.download-icon {
+  background: #fafafa; padding-left: 1px !important;
+   float: left; width: 30px;
+   cursor: pointer;
+   border-radius: 5px;
+   margin-right: 5px;
+}
+.download-icon img{
+ height: 25px;
+}
+
+
+.auth_title {
+  text-shadow: 1px 1px #ddd;
+  font-weight: bolder;
+}
+
+.full button span {
+  background-color: limegreen;
+  border-radius: 32px;
+  color: black;
+}
+.partially button span {
+  background-color: orange;
+  border-radius: 32px;
+  color: black;
+}
+
+.table-report {
+  width: 100%;
+}
+
+.table-report td, .table-report th {
+  border : 1px solid #aaa;
+  padding: 2px !important;
+}
+
+.list-inline {
+  padding-left: 0;
+  list-style: none;
+}
+
+.list-inline-item {
+  display: inline-block;
+}
+
+.list-inline-item:not(:last-child) {
+  margin-right: 5px;
+}
+.filter-label{
+  max-width: 200px; margin-left: 2px; float: left; 
+  background-color: #007bff;color: #fff; 
+  border-radius: 5px;opacity: 0.8;
+  font-size: 12px;
+}
+.filter-label-info {
+  padding:2px;margin: 0px !important; background-color:#17a2b8; 
+  border-radius: 5px;opacity: 0.8;color: #fff; 
+  font-size: 12px;
+}
+
+.text-primary, .prop-value {
+  color: blue
+}
+.reportTitle {
+  width: 100%; float:left;
+}
+.reportTitle h5{
+  font-size: 18px !important;
+  margin-bottom: 0px;
+}
+.bottomDashed {
+  border-bottom: 1px dashed #aaa;
+}
+.sheet tr {
+  height: 25px;
+}
+
+.input-edit {
+  width: 100%;
+  border: 1px solid #fff;
+  border-radius: 0%;
+  text-align: right;
+  margin: 0px !important;
+}
+.editableTD td{
+  max-width: 70px !important;
+  padding: 0px !important;
+}
+
+
+.editableTable{
+  width: 100%;
+}
+
+.editableTable thead{
+  font-size: 12px;
+  text-align: center;
+  font-weight: bold;
+
+}
+.editableTable tbody{
+  font-size: 12px;
+  white-space: nowrap
+}
+
+.editableTable td, .editableTable th{
+  border:1px solid #aaa;
+}
+
+.box div, .box ul {
+  float: right;
+}
+
+.showHideAddForm {
+  margin-top: -57px; margin-right: 10px;
+}
+
+.startUpLoader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+  *{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+    thead {
+      display : table-header-group;
+    }
+
+    tr {
+      page-break-inside : avoid;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    .text-center{
+      text-align: center;
+    }
+
+    .row, .col-sm-12, .col-xs-12 {
+       width :100%;
+    }
+    /* sourced from jimmybonney.com.  Thank you! */
+    .table-header-rotated th.row-header{
+      width: auto;
+    }
+    .row {
+      width: 100%; float:left;
+      margin: 0px;
+    }
+
+    table, td, th{
+      /*border : 1px solid #001;*/
+      border-collapse : collapse !important;
+    };
+
+    .table-header-rotated td{
+      width: 40px;
+      border-top: 1px solid #dddddd;
+      border-left: 1px solid #dddddd;
+      border-right: 1px solid #dddddd;
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .table-header-rotated th.rotate-45{
+      height: 80px;
+      width: 40px;
+      min-width: 40px;
+      max-width: 40px;
+      position: relative;
+      vertical-align: bottom;
+      padding: 0;
+      font-size: 12px;
+      line-height: 0.8;
+    }
+
+    .table-header-rotated th.rotate-45 > div{
+      position: relative;
+      top: 0px;
+      left: 40px; /* 80 * tan(45) / 2 = 40 where 80 is the height on the cell and 45 is the transform angle*/
+      height: 100%;
+      -ms-transform:skew(-45deg,0deg);
+      -moz-transform:skew(-45deg,0deg);
+      -webkit-transform:skew(-45deg,0deg);
+      -o-transform:skew(-45deg,0deg);
+      transform:skew(-45deg,0deg);
+      overflow: hidden;
+      border-left: 1px solid #dddddd;
+      border-right: 1px solid #dddddd;
+      // border-top: 1px solid #dddddd;
+    }
+
+    .table-header-rotated th.rotate-45 span {
+      -ms-transform:skew(45deg,0deg) rotate(315deg);
+      -moz-transform:skew(45deg,0deg) rotate(315deg);
+      -webkit-transform:skew(45deg,0deg) rotate(315deg);
+      -o-transform:skew(45deg,0deg) rotate(315deg);
+      transform:skew(45deg,0deg) rotate(315deg);
+      position: absolute;
+      bottom: 30px; /* 40 cos(45) = 28 with an additional 2px margin*/
+      left: -25px; /*Because it looked good, but there is probably a mathematical link here as well*/
+      display: inline-block;
+      // width: 100%;
+      width: 85px; /* 80 / cos(45) - 40 cos (45) = 85 where 80 is the height of the cell, 40 the width of the cell and 45 the transform angle*/
+      text-align: left;
+      // white-space: nowrap; /*whether to display in one line or not*/
+    }
+
+    .table-header-rotated > thead > tr > th {
+      border: none;
+    }
+
+    .table-subtotal-row {
+      background-color:#eee;
+      font-weight:bold;
+      margin-bottom: 2px;
+    }
+
+    .table-subtotal-row > td {
+      border-bottom : 1px solid #000 !important;
+    }
+
+    body {
+      margin: 1em;
+    }
+
+  .arms{
+    height: 70px !important;
+    display: block!important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100px !important;
+  }
+    .department {
+      width: 36%; display:block; margin-left: auto; margin-right: auto;
+    }
+    .sheetTitle {
+      width: 88%; display:block; margin-left: auto; margin-right: auto;
+    }
+    @page {
+      size: A4 portrait;
+      margin: 1mm;
+    }
+</style>
+</head>

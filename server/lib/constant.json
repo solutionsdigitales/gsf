@@ -1,0 +1,13 @@
+{
+    "DOCUMENT_STATUS": {
+        "PENDING": 1,
+        "SIGNED": 2,
+        "APPROVED": 3,
+        "CLOSED": 4
+    },
+    "VOUCHER_TUPES" : {
+        "PRF" : 1,
+        "DDF" : 2,
+        "EXR" :3
+    }
+}

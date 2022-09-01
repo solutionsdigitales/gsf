@@ -1,5 +1,5 @@
 {
-  "name": "ePRF",
+  "name": "GSF",
   "scripts": {
     "dev": "yarn build && node server/app.js",
     "build": "cd ./client && yarn build",

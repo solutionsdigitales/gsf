@@ -1,0 +1,32 @@
+<div class='row'>
+
+        <div style='font-size:16px; width:80%!important; float:left'>
+          <b>
+            {{pyramid.country_name}}<br />
+          </b>
+
+          {{#if pyramid.region_name}}
+          <b>{{translate "TREE.REGION"}}</b> :<span class='text-primary'> &nbsp; {{pyramid.region_name}}</span><br />
+          {{/if}}
+          {{#if pyramid.district_name}}
+          <b>{{translate "TREE.DISTRICT"}}</b> :<span class='text-primary'> &nbsp;{{pyramid.district_name}}</span><br />
+          {{/if}}
+          {{#if pyramid.health_zone_name}}
+          <b>{{translate "TREE.HEALTH_ZONE"}}</b> :<span class='text-primary'> &nbsp;{{pyramid.health_zone_name}}</span><br />
+          {{/if}}
+          {{#if pyramid.health_area_name}}
+          <b>{{translate "TREE.HEALTH_AREA"}}</b> :<span class='text-primary'> &nbsp;{{pyramid.health_area_name}}</span><br />
+          {{/if}}
+        </div>
+        <div style='font-size:14px; width:19%!important; float:left'>
+          {{translate "REPORT.PRODUCED_ON"}} 
+          <span class='text-primary'>
+            <time datetime="{{metadata.timestamp}}">{{date metadata.timestamp}}</time>  
+          </span>
+          </br>
+          {{translate "REPORT.BY"}} <span class='text-primary'>{{metadata.user.name}}</span>
+          <span style='color:#fff'>.</span><br />
+          <span style='color:#fff'>.</span><br />
+        </div>
+
+</div>
