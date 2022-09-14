@@ -53,20 +53,25 @@ class Routes {
 
     app.put('/roles/:uuid', setting.role.update);
     app.delete('/roles/:uuid', setting.role.delete);
-
    
     app.post('/services', setting.service.create);
     app.put('/services/:uuid', setting.service.update);
     app.delete('/services/:uuid', setting.service.delete);
     app.get('/services', setting.service.read);
     app.get('/services/:uuid', setting.service.detail);
-
+    
+    app.post('/towns', setting.town.create);
+    app.put('/towns/:id', setting.town.update);
+    app.delete('/towns/:id', setting.town.delete);
+    app.get('/towns', setting.town.read);
+    app.get('/towns/:id', setting.town.detail);
     
     app.post('/members', setting.member.create);
     app.put('/members/:uuid', setting.member.update);
     app.delete('/members/:uuid', setting.member.delete);
     app.get('/members', setting.member.read);
     app.get('/members/:uuid', setting.member.detail);
+    app.get('/members/download/excel', setting.memberDownload.exportToExcel);
 
     app.post('/cellules', setting.cellule.create);
     app.put('/cellules/:uuid', setting.cellule.update);
@@ -75,10 +80,17 @@ class Routes {
     app.get('/cellules/:uuid', setting.cellule.detail);
 
     
+    app.post('/pricing', setting.pricing.create);
+    app.put('/pricing/:uuid', setting.pricing.update);
+    app.get('/pricing', setting.pricing.read);
+    app.get('/pricing/:uuid', setting.pricing.detail);
+    app.delete('/pricing/:uuid', setting.pricing.delete);
+    
     app.post('/transactions', setting.transactions.create);
     app.put('/transactions/:uuid', setting.transactions.update);
     app.get('/transactions', setting.transactions.read);
     app.get('/transactions/:uuid', setting.transactions.detail);
+    app.delete('/transactions/:uuid', setting.transactions.delete);
   }
 
 }

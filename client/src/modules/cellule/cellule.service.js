@@ -1,9 +1,10 @@
+
 import PrototypeApiService from '../../service/httpService'
 
-function ProjectService() {
-  const baseUrl = '/projects';
+function CelluleService() {
+  const baseUrl = '/cellules';
   return new PrototypeApiService(baseUrl);
 }
 
-const cds = ProjectService();
+const cds = CelluleService();
 export default cds;

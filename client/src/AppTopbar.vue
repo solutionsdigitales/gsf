@@ -5,7 +5,7 @@
         alt="Logo"
         :src="darkTheme ? '/images/IMAicon.jpg' : '/images/IMAicon.jpg'"
       />
-      <span>E-PRF</span>
+      <span>GSF</span>
     </router-link>
     <button
       class="p-link layout-menu-button layout-topbar-button"
@@ -55,16 +55,13 @@
       :close="closeModal"
       :display="displayChangePwdModal"
     ></ChangePasswordModal>
-
-    <ESignModal :display="displayESignModal" :close="closeEsignModal">
-    </ESignModal>
   </div>
 </template>
 
 <script>
 import SwitchLanguage from "./components/SwitchLanguage";
 import ChangePasswordModal from "./modules/user/change_pwd.vue";
-import ESignModal from "./components/eSign.vue";
+
 
 export default {
   data() {
@@ -73,7 +70,6 @@ export default {
       userName: "",
       displayChangePwdModal: false,
       userActions: [],
-      displayESignModal: false,
     };
   },
   created() {
@@ -97,9 +93,6 @@ export default {
     onLanguageChange() {
       this.$emit("language-changed");
     },
-    closeEsignModal() {
-      this.displayESignModal = false;
-    },
     setUserActions() {
       this.userActions = [
         // label: this.connectedUser.name,
@@ -108,13 +101,6 @@ export default {
           icon: "pi pi-pencil",
           command: () => {
             this.displayChangePwdModal = true;
-          },
-        },
-        {
-          label: this.$t("ESIGN.TITLE"),
-          icon: "pi pi-pencil",
-          command: () => {
-            this.displayESignModal = true;
           },
         },
         {
@@ -140,7 +126,6 @@ export default {
   components: {
     SwitchLanguage,
     ChangePasswordModal,
-    ESignModal,
   },
 };
 </script>

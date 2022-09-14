@@ -1,9 +1,9 @@
 import PrototypeApiService from '../../service/httpService'
 
-function ProjectService() {
-  const baseUrl = '/projects';
+function PaymentService() {
+  const baseUrl = '/transactions';
   return new PrototypeApiService(baseUrl);
 }
 
-const cds = ProjectService();
+const cds = PaymentService();
 export default cds;

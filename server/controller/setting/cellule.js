@@ -23,7 +23,9 @@ function lookUp(options) {
   let sql = `
     SELECT 
         BUID(c.uuid) as uuid, c.name,
-        c.number, c.town_id, c.created_at
+        FORMAT_ENTITY_NUMBER(c.number) as number,
+        FORMAT_DATE(c.creation_date) as creation_date,
+        c.town_id, c.created_at
     FROM cellule c
   `;
 
@@ -43,7 +45,8 @@ function detail(req, res, next) {
   const sql = `
     SELECT 
         BUID(c.uuid) as uuid, c.name,
-        c.number, c.town_id, c.created_at
+        c.number, FORMAT_DATE(c.creation_date) as creation_date,
+        c.town_id, c.created_at
     FROM cellule c
     WHERE c.uuid = ?
   `;

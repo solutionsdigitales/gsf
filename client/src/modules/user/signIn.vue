@@ -5,7 +5,7 @@
         <br />
         <br />
         <div class="p-d-flex p-jc-center">
-          <h1>E-PRF</h1>
+          <h1>GSF</h1>
         </div>
       </div>
       <!--Content before waves-->
@@ -80,19 +80,7 @@
                 />
 
                 <br /><br />
-                <div class="grid">
-                  <div class="col-2">
-                    <img
-                      src="/images/IMAicon.jpg"
-                      style="height: 30px; float: right"
-                    />
-                  </div>
-                  <div class="col-8">
-                    <span class="link" @click="msauth()">{{
-                      $t("FORM.LABELS.SIGN_IN_BY_CORUS_ACCOUT")
-                    }}</span>
-                  </div>
-                </div>
+               
               </form>
             </div>
           </div>

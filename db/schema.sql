@@ -14,12 +14,14 @@ DROP TABLE IF EXISTS `enterprise`;
 CREATE TABLE IF NOT EXISTS `enterprise` (
   `uuid`  BINARY(16) NOT NULL,
   `name` varchar(200)  NULL,
+  `abbreviation` varchar(200)  NULL,
+  `code` varchar(200)  NULL,
   `currency_id` tinyint(3) unsigned NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_update` DATETIME DEFAULT NULL,
   PRIMARY KEY (`uuid`),
   UNIQUE KEY `name`(`name`),
-  CONSTRAINT `enterprise__currency` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`) ON UPDATE CASCADE
+  KEY `currency_id`(`currency_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 
@@ -200,6 +202,7 @@ CREATE TABLE `cellule` (
   `name` VARCHAR(100),
   `number` INT NOT NULL,
   `town_id` VARCHAR(100)  NOT NULL,
+  `creation_date` DATE NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_update` datetime NULL,
   KEY `town_id`(`town_id`)
@@ -219,6 +222,17 @@ CREATE TABLE `member`(
   `number` INT NOT NULL,
   `cellule_uuid` BINARY(16) NOT NULL,
   `joining_date` DATE NOT NULL,
+  `created_by` BINARY(16) NOT NULL COMMENT 'user_id',
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_update` DATETIME NULL,
+  PRIMARY KEY (`uuid`)
+)ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+
+CREATE TABLE `pricing`(
+  `uuid` BINARY(16) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `amount` DECIMAL(19,4) NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_update` DATETIME NULL,
   PRIMARY KEY (`uuid`)
@@ -230,8 +244,11 @@ CREATE TABLE `transactions`(
   `quantity` DECIMAL(19, 4) NOT NULL,
   `number` INT NOT NULL,
   `member_uuid` BINARY(16) NOT NULL,
+  `pricing_uuid` BINARY(16) NULL,
   `date` DATE NOT NULL,
   `transaction_type` VARCHAR(50) NOT NULL,
+  `month` VARCHAR(30) NULL,
+  `year` VARCHAR(10) NULL,
   `currency` VARCHAR(50) NOT NULL,
   `currency_id` tinyint(3) unsigned NOT NULL,
   `payment_method` VARCHAR(50) NOT NULL,
@@ -245,6 +262,7 @@ CREATE TABLE `transactions`(
   `locked` TINYINT(2) DEFAULT 0,
   PRIMARY KEY (`uuid`),
   KEY `member_uuid`(`member_uuid`),
+  KEY `pricing_uuid`(`pricing_uuid`),
   KEY `user_id`(`user_id`),
   KEY `status`(`status`),
   CONSTRAINT `transaction__currency` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`)

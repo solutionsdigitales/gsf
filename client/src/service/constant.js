@@ -69,7 +69,22 @@ function Containts() {
     PROCUREMENT: 1,
     FINANCE: 2,
   }
-  return c;
+  c.MONTHS = [
+    "JANUARY",
+    "FEBRUARY",
+    "MARCH",
+    "APRIL",
+    "MAY",
+    "JUNE",
+    "JULY",
+    "AUGUST",
+    "SEPTEMBER",
+    "OCTOBER",
+    "NOVEMBER",
+    "DECEMBER",
+  ];
+
+return c;
 }
 
 const cts = Containts();

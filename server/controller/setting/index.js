@@ -11,7 +11,10 @@ const templates = require('./template');
 const paymentMethod = require('./payment_method');
 const och_base = require('./och_base');
 const member = require('./member');
+const memberDownload = require('./member-download');
 const cellule = require('./cellule');
+const town = require('./town');
+const pricing = require('./pricing');
 
 module.exports = {
   user,
@@ -27,4 +30,7 @@ module.exports = {
   paymentMethod,
   member,
   cellule,
+  town,
+  memberDownload,
+  pricing,
 };

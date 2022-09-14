@@ -3,6 +3,7 @@ const constants = require('../server/lib/constant.json');
 
 const userTest = {
   user: {
+    uuid: "4EF5B4C5307F4954830C6BE2B8ADA3B4",
     name: 'admin',
     pwd: 'admin'
   }
@@ -377,6 +378,7 @@ const memberTest = {
     phone: '243812537702',
     joining_date: '2022-08-31',
     cellule_uuid: celluleTest.cellule.uuid,
+    created_by: userTest.user.uuid,
     town_id: 'C/Nsele',
   },
 
@@ -393,6 +395,7 @@ const memberTest = {
     gender: 'M',
     joining_date: '2022-09-01',
     cellule_uuid: celluleTest.cellule2.uuid,
+    created_by: userTest.user.uuid,
     town_id: 'C/Nsele',
   },
 };

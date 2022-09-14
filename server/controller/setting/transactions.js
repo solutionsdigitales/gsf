@@ -4,7 +4,7 @@ const FilterParser = require('../../lib/filter');
 
 
 // database connection
-const uuidToConvert = ['uuid', 'member_uuid', 'user_id'];
+const uuidToConvert = ['uuid', 'member_uuid', 'user_id', 'pricing_uuid'];
 
 function read(req, res, next) {
   const options = req.query;
@@ -63,6 +63,17 @@ function update(req, res, next) {
   }).catch(next);
 }
 
+function remove(req, res, next) {
+  const uuid = db.bid(req.params.uuid);
+  const data = {
+    locked: 1,
+  };
+  const sql = 'UPDATE transactions SET ? WHERE uuid = ?';
+  db.exec(sql, [data, uuid]).then(rows => {
+    res.status(200).json(rows);
+  }).catch(next);
+}
+
 function lookUp(options) {
   db.convert(options, uuidToConvert);
   const filters = new FilterParser(options, { tableAlias: 't' });
@@ -70,12 +81,15 @@ function lookUp(options) {
     SELECT
         BUID(t.uuid) AS 'uuid', t.payment_method, t.phone, t.email, t.amount, 
         t.currency,t.currency_id, t.quantity, t.transaction_type,
-        IF(t.status='OUI', 1, 0) AS 'status', 
+        IF(t.status='OUI', 1, 0) AS 'status',
+        t.month, t.year,
+        t.locked,
         FORMAT_DATETIME(t.created_at) AS 'created_at',
-        t.number,
-        t.date, FORMAT_DATETIME(t.last_update) AS 'last_update',
+        FORMAT_ENTITY_NUMBER(t.number) as number,
+        FORMAT_DATE(t.date) as 'date', FORMAT_DATETIME(t.last_update) AS 'last_update',
         BUID(m.uuid) AS 'member_uuid', m.lastname as member_lastname,
-        m.middlename as member_middlename, m.firstname as member_firstname
+        m.middlename as member_middlename, m.firstname as member_firstname,
+        u.name as 'user_name'
     FROM transactions t
     LEFT JOIN  member m ON m.uuid = t.member_uuid
     LEFT JOIN  user u ON u.id = t.user_id
@@ -89,6 +103,7 @@ function lookUp(options) {
   filters.equals('locked');
   filters.equals('phone');
   filters.custom('member_uuid', 'm.uuid=?');
+  filters.setOrder(' ORDER BY t.number DESC');
 
   return {
     sql: filters.applyQuery(sql),
@@ -97,5 +112,5 @@ function lookUp(options) {
 }
 
 module.exports = {
-  read, create, update, detail,
+  read, create, update, detail, delete : remove
 }
