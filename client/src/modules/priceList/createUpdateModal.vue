@@ -24,7 +24,7 @@
           <InputText
             id="name"
             v-on:input="validate()"
-            v-model="selectedpricing.name"
+            v-model="selectedPricing.name"
             :class="{
               'p-invalid': validationErrors.name && submitted,
             }"
@@ -44,15 +44,26 @@
               id="amount"
               v-on:input="validate()"
               :minFractionDigits="2"
-              v-model="selectedpricing.amount"
+              v-model="selectedPricing.amount"
               :class="{
                 'p-invalid': validationErrors.amount && submitted,
               }"
             />
         </div>
 
-</div>
-
+         <br />
+      <div class="p-field-checkbox">
+        <Checkbox
+          id="is_periodic"
+          :binary="true"
+          name="is_periodic"
+          v-model="selectedPricing.is_periodic"
+        />
+        <label for="is_periodic">
+          {{ $t("FORM.LABELS.PERIODIC") }}
+        </label>
+      </div>
+      </div>
     </form>
     <template #footer>
       <Button
@@ -88,7 +99,7 @@ export default defineComponent({
   data() {
     return {
       items: [],
-      selectedpricing: {},
+      selectedPricing: {},
       validationErrors: {},
       submitted: false,
     };
@@ -102,7 +113,7 @@ export default defineComponent({
   },
   methods: {
     closeDialog() {
-      this.selectedpricing = {};
+      this.selectedPricing = {};
       this.close(false);
     },
     submit() {
@@ -122,13 +133,13 @@ export default defineComponent({
       }
       this.loading = true;
       const operation = this.pricing.uuid
-        ? PricingService.update(this.pricing.uuid, this.selectedpricing)
-        : PricingService.create(this.selectedpricing);
+        ? PricingService.update(this.pricing.uuid, this.selectedPricing)
+        : PricingService.create(this.selectedPricing);
 
       operation
         .then(() => {
           NotifyService.success(this, "", null);
-           this.selectedpricing = {};
+           this.selectedPricing = {};
           this.close(true);
         })
         .catch(() => {
@@ -141,13 +152,14 @@ export default defineComponent({
     find() {
       if (!this.pricing.uuid) return;
       PricingService.read(this.pricing.uuid).then((pricing) => {
-        this.selectedpricing = pricing;
+        pricing.is_periodic = !!pricing.is_periodic;
+        this.selectedPricing = pricing;
         console.log(pricing);
       });
     },
     validate() {
       if (!this.submitted) return;
-      if (this.selectedpricing.name) {
+      if (this.selectedPricing.name) {
         delete this.validationErrors.name;
       } else {
         this.validationErrors.name = true;

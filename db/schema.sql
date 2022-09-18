@@ -233,6 +233,7 @@ CREATE TABLE `pricing`(
   `uuid` BINARY(16) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `amount` DECIMAL(19,4) NOT NULL,
+  `is_periodic` TINYINT(2),
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_update` DATETIME NULL,
   PRIMARY KEY (`uuid`)

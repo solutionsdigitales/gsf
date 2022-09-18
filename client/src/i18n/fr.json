@@ -528,6 +528,7 @@
 			"PERCENTAGE": "Pourcentage",
 			"PERCENT": "Pourcent",
 			"PERIOD": "Période",
+			"PERIODIC": "Périodique",
 			"PERIODES": "Périodes",
 			"PERIOD_FROM": "Periode Debut",
 			"PERIOD_TO": "Periode Fin",
@@ -1083,7 +1084,7 @@
 		"SELECT_OFFICE" : "Selection du bureau",
 		"IS_BUDGET_HOLDER": "Est gestionnaire du budget",
 		"IS_EXPATRIATE": "Est expatrié",
-		"WELCOME": "Bienvenu à l'application ePRF",
+		"WELCOME": "Bienvenu à l'application GFS",
 		"LIST_TO_APPROVE": "Les documents à approuver",
 		"UNIT": "Unité",
 		"LABELS": {

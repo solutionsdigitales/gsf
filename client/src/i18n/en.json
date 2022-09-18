@@ -521,6 +521,7 @@
 			"PERCENTAGE": "Percentage",
 			"PERCENT": "Percent",
 			"PERIOD": "Period",
+			"PERIODIC": "Périodic",
 			"PERIODES": "Periods",
 			"PERIOD_FROM": "Period From",
 			"PERIOD_TO": "Period To",
@@ -1078,7 +1079,7 @@
 		"SELECT_OFFICE": "Office selection",
 		"IS_BUDGET_HOLDER": "Is bugdet holder",
 		"IS_EXPATRIATE": "Is expatriate",
-		"WELCOME": "Welcome to the ePRF application!",
+		"WELCOME": "Welcome to the GSF application!",
 		"LIST_TO_APPROVE": "Documents to approve",
 		"UNIT": "Unit",
 		"LABELS": {

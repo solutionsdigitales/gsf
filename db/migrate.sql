@@ -1,0 +1,1 @@
+ALTER TABLE `pricing` ADD `is_periodic` TINYINT(2);

@@ -91,9 +91,10 @@
         />
       </div>
 
-      <div class="p-field">
+      <div class="p-field" v-if="selectedPrice.is_periodic">
         <label
           for="month"
+          class="label-required"
           :class="{ 'p-error': validationErrors.month && submitted }"
         >
           {{ $t("FORM.LABELS.MONTH") }}
@@ -108,9 +109,10 @@
         />
       </div>
 
-        <div class="p-field">
+      <div class="p-field" v-if="selectedPrice.is_periodic">
         <label
           for="year"
+          class="label-required"
           :class="{ 'p-error': validationErrors.year && submitted }"
         >
           {{ $t("FORM.LABELS.YEAR") }}
@@ -124,7 +126,6 @@
           optionLabel="id"
         />
       </div>
-
 
       <div class="p-field">
         <label
@@ -217,6 +218,7 @@ export default defineComponent({
   },
   created() {
     this.months = [];
+    this.validationErrors = {};
     constants.MONTHS.forEach((m) => {
       this.months.push({
         id: m,
@@ -246,10 +248,10 @@ export default defineComponent({
       this.selectedTransaction.member_uuid = this.selectedMember.uuid;
       this.validate();
     },
-    setMonth(){
+    setMonth() {
       this.selectedTransaction.month = this.selectedMonth.id;
     },
-    setYear(){
+    setYear() {
       this.selectedTransaction.year = this.selectedYear.id;
     },
     setCurrency() {
@@ -314,8 +316,15 @@ export default defineComponent({
       this.priceList = await priceListService.read();
       this.currencies = await CurrencyService.read();
       const _members = await MemberService.read();
-      this.members = _members.map(m => {
-        m.fullname = m.number+ ' - ' + m.lastname + ' ' + (m.middlename || '') + ' ' + m.firstname; 
+      this.members = _members.map((m) => {
+        m.fullname =
+          m.number +
+          " - " +
+          m.lastname +
+          " " +
+          (m.middlename || "") +
+          " " +
+          m.firstname;
         return m;
       });
       this.currencies = this.$store.state.currencies;
@@ -337,6 +346,9 @@ export default defineComponent({
         "amount",
         "date",
       ];
+      if (this.selectedPrice.is_periodic) {
+        fields.push("month", "yaer");
+      }
       fields.forEach((field) => {
         if (this.selectedTransaction[field]) {
           delete this.validationErrors[field];
