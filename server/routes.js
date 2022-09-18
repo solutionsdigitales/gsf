@@ -91,6 +91,7 @@ class Routes {
     app.get('/transactions', setting.transactions.read);
     app.get('/transactions/:uuid', setting.transactions.detail);
     app.delete('/transactions/:uuid', setting.transactions.delete);
+    app.get('/transactions/download/excel', setting.transactionsDownload.exportToExcel);
   }
 
 }

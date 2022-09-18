@@ -88,7 +88,7 @@ function lookUp(options) {
         FORMAT_ENTITY_NUMBER(t.number) as number,
         FORMAT_DATE(t.date) as 'date', FORMAT_DATETIME(t.last_update) AS 'last_update',
         BUID(m.uuid) AS 'member_uuid', m.lastname as member_lastname,
-        m.middlename as member_middlename, m.firstname as member_firstname,
+        m.middlename as member_middlename, m.firstname as member_firstname, m.number as member_number,
         u.name as 'user_name'
     FROM transactions t
     LEFT JOIN  member m ON m.uuid = t.member_uuid
@@ -112,5 +112,5 @@ function lookUp(options) {
 }
 
 module.exports = {
-  read, create, update, detail, delete : remove
+  read, create, update, detail, lookUp, delete : remove
 }

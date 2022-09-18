@@ -1,15 +1,15 @@
 <template>
   <div class="col-p12 card page-body">
-    <div style="float: right; width: 300px">
-      <span class="p-buttonset">
-        <Button
-          style="float: right"
-          id="addButton"
-          v-on:click="Add()"
-          :label="$t('FORM.BUTTONS.ADD')"
-          icon="pi pi-plus"
+       <div style="float: right; width: 300px">
+      
+        <Button v-on:click="Add()" :label="$t('FORM.BUTTONS.ADD')" icon="pi pi-plus" />
+      
+       <Button
+          v-on:click="downloadExcel()"
+          class="p-button-secondary"
+          :label="$t('FORM.BUTTONS.EXPORT')"
+          icon="pi pi-file-excel"
         />
-      </span>
     </div>
     <br />
     <br />
@@ -54,7 +54,7 @@
         :header="$t('TABLE.COLUMNS.DATE_REGISTERED')"
       ></Column>
 
-      <Column field="member_fullname" :header="$t('FORM.LABELS.NAME')">
+      <Column field="member_fullname" :header="$t('TREE.MEMBERS')">
         <template #body="{ data }">
           {{ data.member_fullname }}
         </template>
@@ -117,6 +117,7 @@ import transactionService from "./payment.service";
 import PaymentActions from "./actions";
 import CreateUpdateModal from "./new.vue";
 import AppCache from "../../service/appCache";
+import UtilService from "../../service/util";
 
 export default {
   data() {
@@ -125,6 +126,7 @@ export default {
       Transaction: {},
       items: [],
       loading: false,
+      server: '',
       selectedTransaction: null,
       displayCreateModal: false,
       filters: {
@@ -134,6 +136,7 @@ export default {
   },
   created() {
     const cache = AppCache.get("session") || {};
+    this.server = this.$store.state.server;
     if (cache.token) {
       this.getTransaction();
     } else {
@@ -151,12 +154,7 @@ export default {
             if(t.month) {
               t.period = this.$t('TABLE.COLUMNS.DATE_MONTH.' + t.month ) + ' '+ (t.year || '');
             }
-            t.member_fullname =
-              t.member_lastname +
-              " " +
-              (t.member_middlename || "") +
-              " " +
-              t.member_firstname;
+            t.member_fullname = `${t.member_number} -  ${t.member_lastname}  ${(t.member_middlename || '')} ${t.member_firstname}`;
             return t;
           });
         })
@@ -170,6 +168,10 @@ export default {
     Add() {
       this.displayCreateModal = true;
       this.Transaction = {};
+    },
+     downloadExcel() {
+      const uri = `${this.server}transactions/download/excel?lang=${this.lang}`;
+      UtilService.downloadURI(uri);
     },
     closeDialog(result) {
       if (result) {
