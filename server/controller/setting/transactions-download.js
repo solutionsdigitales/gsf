@@ -30,7 +30,7 @@ async function exportToExcel(req, res, next) {
             { name: t('FORM.LABELS.DATE'), filterButton: true, },
             { name: t('TABLE.COLUMNS.DATE_REGISTERED') },
             { name: t('TREE.MEMBERS') , filterButton: true },
-            { name: t('FORM.LABELS.AMOUNT'), filterButton: true },
+            { name: t('FORM.LABELS.AMOUNT'), filterButton: true, totalsRowFunction: 'sum'},
             { name: t('FORM.LABELS.CURRENCY'), filterButton: true },
             { name: t('FORM.LABELS.PAYMENT_METHOD') , filterButton: true  },
             { name: t('FORM.LABELS.TRANSACTION_TYPE') , filterButton: true },
