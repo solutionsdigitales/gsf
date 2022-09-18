@@ -34,7 +34,7 @@ function lookUp(options) {
   filters.equals('middlename');
   filters.equals('firstname');
   filters.equals('cellule_uuid');
-  filters.setOrder(' ORDER BY m.number DESC ');
+  filters.setOrder(' ORDER BY m.created_at DESC ');
   return {
     sql: filters.applyQuery(sql),
     params: filters.parameters(),
