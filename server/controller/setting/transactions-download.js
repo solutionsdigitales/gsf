@@ -36,6 +36,8 @@ async function exportToExcel(req, res, next) {
             { name: t('FORM.LABELS.TRANSACTION_TYPE') , filterButton: true },
             { name: t('FORM.LABELS.PERIOD') , filterButton: true },
             { name: t('TABLE.COLUMNS.REGISTERED_BY'), filterButton: true },
+            { name: t('FORM.LABELS.CANCELED'), filterButton: true },
+            
         ],
         rows: rows.map((row, index) => {
             if (row.month) {
@@ -43,6 +45,7 @@ async function exportToExcel(req, res, next) {
             }
 
             row.member_fullname = `${row.member_number} - ${row.member_lastname} ${(row.member_middlename || '')} ${row.member_firstname}`;
+            row.canceled = parseInt(`${row.locked}`)? t('FORM.LABELS.YES'): t('FORM.LABELS.NO');
 
             return [
                 index + 1,
@@ -56,6 +59,7 @@ async function exportToExcel(req, res, next) {
                 row.transaction_type,
                 row.period,
                 row.user_name,
+                row.canceled,
             ];
         })
     });
