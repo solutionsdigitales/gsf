@@ -127,6 +127,7 @@ export default {
       items: [],
       loading: false,
       server: '',
+      lang: '',
       selectedTransaction: null,
       displayCreateModal: false,
       filters: {
@@ -137,6 +138,7 @@ export default {
   created() {
     const cache = AppCache.get("session") || {};
     this.server = this.$store.state.server;
+     this.lang = this.$i18n.locale;
     if (cache.token) {
       this.getTransaction();
     } else {
