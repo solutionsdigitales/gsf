@@ -347,7 +347,7 @@ export default defineComponent({
         "date",
       ];
       if (this.selectedPrice.is_periodic) {
-        fields.push("month", "yaer");
+        fields.push('month', 'year');
       }
       fields.forEach((field) => {
         if (this.selectedTransaction[field]) {
