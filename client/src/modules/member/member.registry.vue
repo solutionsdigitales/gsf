@@ -1,42 +1,49 @@
 <template>
   <div class="col-p12 card page-body">
     <div style="float: right; width: 300px">
-      
-        <Button v-on:click="Add()" :label="$t('FORM.BUTTONS.ADD')" icon="pi pi-plus" />
-      
-       <Button
-          v-on:click="downloadExcel()"
-          class="p-button-secondary"
-          :label="$t('FORM.BUTTONS.EXPORT')"
-          icon="pi pi-file-excel"
-        />
+      <Button
+        v-on:click="Add()"
+        :label="$t('FORM.BUTTONS.ADD')"
+        icon="pi pi-plus"
+      />
+
+      <Button
+        v-on:click="downloadExcel()"
+        class="p-button-secondary"
+        :label="$t('FORM.BUTTONS.EXPORT')"
+        icon="pi pi-file-excel"
+      />
     </div>
     <br />
     <br />
-    <br />
+    <div style="height: calc(73vh)">
+      <DataTable
+        @rowSelect="onRowSelect"
+        :value="members"
+        showGridlines
+        stripedRows
+        filterDisplay="row"
+        v-model:filters="filters"
+        v-model:selection="selectedMember"
+        dataKey="uuid"
+        :resizableColumns="true"
+        :scrollable="true"
+        columnResizeMode="fit"
+        scrollHeight="flex"
+        responsiveLayout="scroll"
+        :loading="loading"
+      >
+        <template #header>
+          {{ $t("TREE.MEMBERS") }}
+        </template>
 
-    <DataTable
-      @rowSelect="onRowSelect"
-      :value="members"
-      showGridlines
-      stripedRows
-      filterDisplay="row"
-      v-model:filters="filters"
-      v-model:selection="selectedMember"
-      dataKey="uuid"
-      responsiveLayout="scroll"
-    >
-      <template #header>
-        {{ $t("TREE.MEMBERS") }}
-      </template>
-      
-      <template #empty>
-        {{$t('FORM.SELECT.EMPTY')}}
-      </template>
+        <template #empty>
+          {{ $t("FORM.SELECT.EMPTY") }}
+        </template>
 
-      <Column selectionMode="single" headerStyle="width: 3em"></Column>
-      <Column field="number" :header="$t('FORM.LABELS.NUMBER')">
-        <template #body="{ data }">
+        <Column selectionMode="single" headerStyle="width: 3em"></Column>
+        <Column field="number" :header="$t('FORM.LABELS.NUMBER')">
+          <template #body="{ data }">
             {{ data.number }}
           </template>
           <template #filter="{ filterModel, filterCallback }">
@@ -48,9 +55,8 @@
               placeholder="Recherche par numéro"
             />
           </template>
-      
-      </Column>
-      <Column field="fullname" :header="$t('FORM.LABELS.LAST_NAME')">
+        </Column>
+        <Column field="fullname" :header="$t('FORM.LABELS.LAST_NAME')">
           <template #body="{ data }">
             {{ data.fullname }}
           </template>
@@ -63,35 +69,50 @@
               placeholder="Recherche par noms"
             />
           </template>
-      </Column>
-      <Column field="gender" :header="$t('FORM.LABELS.GENDER')"></Column>
-      <Column field="address" :header="$t('FORM.LABELS.ADDRESS')"></Column>
-      <Column field="profession" :header="$t('FORM.LABELS.PROFESSION')"></Column>
-      <Column field="town_id" :header="$t('TREE.TOWN')"></Column>
-      <Column field="phone" :header="$t('FORM.LABELS.PHONE')"></Column>
-      <Column field="email" :header="$t('FORM.LABELS.EMAIL')"></Column>
-      <Column field="cellule_name" :header="$t('TREE.CELLULE')">
-      <template #body="e">
-        <span>{{e.data.cellule_number}} - {{e.data.cellule_name}}</span>
-      </template>
-      </Column>
-      
+        </Column>
+        <Column field="gender" :header="$t('FORM.LABELS.GENDER')"></Column>
+        <Column field="address" :header="$t('FORM.LABELS.ADDRESS')"></Column>
+        <Column
+          field="profession"
+          :header="$t('FORM.LABELS.PROFESSION')"
+        ></Column>
+        <Column field="town_id" :header="$t('TREE.TOWN')"></Column>
+        <Column field="phone" :header="$t('FORM.LABELS.PHONE')"></Column>
+        <Column field="email" :header="$t('FORM.LABELS.EMAIL')"></Column>
+        <Column field="cellule" :header="$t('TREE.CELLULE')">
+          <template #body="e">
+            <span>{{ e.data.cellule }}</span>
+          </template>
 
-      <Column field="action" header="Action" style="width: 100px">
-        <template #body="e">
-          <memberActions 
-            :entity="e.data"
-            v-on:reloadMemberRegistry="getMembers()" />
-        </template>
-      </Column>
-    </DataTable>
-   
-    <CreateUpdateModal
-        :member = "member"
+          <template #filter="{ filterModel, filterCallback }">
+            <InputText
+              type="text"
+              v-model="filterModel.value"
+              @input="filterCallback()"
+              class="p-column-filter"
+              placeholder="Recherche par cellule"
+            />
+          </template>
+        </Column>
+
+        <Column field="action" header="Action" style="width: 100px">
+          <template #body="e">
+            <memberActions
+              :entity="e.data"
+              v-on:reloadMemberRegistry="getMembers()"
+            />
+          </template>
+        </Column>
+      </DataTable>
+
+      <CreateUpdateModal
+        :member="member"
         ref="addmemberModal"
-        :close='closeDialog'
-       :display="displayCreateModal">
-    </CreateUpdateModal>
+        :close="closeDialog"
+        :display="displayCreateModal"
+      >
+      </CreateUpdateModal>
+    </div>
   </div>
 </template>
 
@@ -107,37 +128,43 @@ export default {
   data() {
     return {
       members: [],
-      member : {},
+      member: {},
       items: [],
-      server:"",
+      server: "",
       selectedMember: null,
-      displayCreateModal : false,
+      displayCreateModal: false,
+      loading: false,
       lang: "fr",
-       filters: {
+      filters: {
         fullname: { value: null, matchMode: FilterMatchMode.CONTAINS },
         number: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        cellule: { value: null, matchMode: FilterMatchMode.CONTAINS },
       },
     };
   },
   created() {
-    const cache = AppCache.get('session') || {};
+    const cache = AppCache.get("session") || {};
     this.server = this.$store.state.server;
     this.lang = this.$i18n.locale;
-    if(cache.token) {
+    if (cache.token) {
       this.getMembers();
     } else {
       this.$router.push("/auth");
     }
-    
   },
   methods: {
+    
     getMembers() {
+      this.loading = true;
       MemberService.read().then((members) => {
-        this.members = members.map(m => {
-          m.fullname = m.lastname + ' ' + (m.middlename || '') + ' ' + m.firstname; 
+        this.members = members.map((m) => {
+          m.fullname = `${m.lastname} ${m.middlename || ""} ${m.firstname}`;
+          m.cellule = `${m.cellule_number} - ${m.cellule_name}`;
           return m;
         });
-      });
+      }).finally(() => {
+        this.loading = false;
+      })
     },
     onRowSelect($event) {
       console.log($event.data);
@@ -147,7 +174,7 @@ export default {
       this.member = {};
     },
     closeDialog(result) {
-      if(result) {
+      if (result) {
         this.getMembers();
       }
       this.displayCreateModal = false;
@@ -162,8 +189,7 @@ export default {
         {
           label: "delete",
           icon: "pi pi-check",
-          command: () => {
-          },
+          command: () => {},
         },
       ];
     },

@@ -13,7 +13,8 @@
     </div>
     <br />
     <br />
-    <br />
+    
+    <div style="height: calc(73vh)">
     <DataTable
       @rowSelect="onRowSelect"
       :value="items"
@@ -23,8 +24,12 @@
       v-model:filters="filters"
       v-model:selection="selectedTransaction"
       dataKey="uuid"
+       :resizableColumns="true"
+        :scrollable="true"
+        columnResizeMode="fit"
+        scrollHeight="flex"
+        responsiveLayout="scroll"
       :loading="loading"
-      responsiveLayout="scroll"
     >
       <template #header>
         {{ $t("TREE.PAYMENT") }}
@@ -34,7 +39,7 @@
         {{ $t("FORM.SELECT.EMPTY") }}
       </template>
 
-      <Column selectionMode="single" headerStyle="width: 3em"></Column>
+      <Column selectionMode="single" style="max-width: 30px"></Column>
 
       <Column
         field="locked"
@@ -42,8 +47,10 @@
         style="width: 1%; padding: 0px"
       >
         <template #body="e">
-          <div class="invalid-line" v-if="e.data.locked">&nbsp;</div>
+          <div style="height:10px" class="w100">
+            <div class="invalid-line" v-if="e.data.locked">&nbsp;</div>
           <div class="valid-line" v-if="!e.data.locked">&nbsp;</div>
+          </div>
         </template>
       </Column>
 
@@ -54,7 +61,7 @@
         :header="$t('TABLE.COLUMNS.DATE_REGISTERED')"
       ></Column>
 
-      <Column field="member_fullname" :header="$t('TREE.MEMBERS')">
+      <Column field="member_fullname" style="min-width: 200px" :header="$t('TREE.MEMBERS')">
         <template #body="{ data }">
           {{ data.member_fullname }}
         </template>
@@ -70,7 +77,9 @@
       </Column>
       <Column field="amount" :header="$t('FORM.LABELS.AMOUNT')">
         <template #body="e">
-          <span> {{ e.data.amount }} {{ e.data.currency }} </span>
+          <div class="text-right w100">
+             {{ e.data.amount }} {{ e.data.currency }} 
+          </div>
         </template>
       </Column>
       <Column
@@ -100,7 +109,7 @@
         </template>
       </Column>
     </DataTable>
-
+    </div>
     <CreateUpdateModal
       :transaction="Transaction"
       ref="addTransactionModal"

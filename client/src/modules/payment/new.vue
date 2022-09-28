@@ -340,11 +340,11 @@ export default defineComponent({
     validate() {
       if (!this.submitted) return;
       const fields = [
-        "currency_id",
-        "member_uuid",
-        "pricing_uuid",
-        "amount",
-        "date",
+        'currency_id',
+        'member_uuid',
+        'pricing_uuid',
+        'amount',
+        'date',
       ];
       if (this.selectedPrice.is_periodic) {
         fields.push('month', 'year');
