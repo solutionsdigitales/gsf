@@ -42,7 +42,7 @@
         </template>
 
         <Column selectionMode="single"  style="max-width: 30px"></Column>
-        <Column field="number" :header="$t('FORM.LABELS.NUMBER')" style="min-width: 250px">
+        <Column field="number" :header="$t('FORM.LABELS.NUMBER')" >
           <template #body="{ data }">
             {{ data.number }}
           </template>
@@ -56,7 +56,7 @@
             />
           </template>
         </Column>
-        <Column field="fullname" :header="$t('FORM.LABELS.LAST_NAME')">
+        <Column field="fullname" :header="$t('FORM.LABELS.LAST_NAME')" style="min-width: 250px">
           <template #body="{ data }">
             {{ data.fullname }}
           </template>
