@@ -26,6 +26,7 @@ async function exportToExcel(req, res, next) {
     },*/
     columns: [
       { name: '#',},
+      { name: t('FORM.LABELS.NUMBER'), filterButton: true ,},
       { name: t('FORM.LABELS.LAST_NAME'), filterButton: true ,},
       { name: t('FORM.LABELS.MIDDLE_NAME') },
       { name: t('FORM.LABELS.FIRST_NAME') },
@@ -40,6 +41,7 @@ async function exportToExcel(req, res, next) {
     rows: rows.map((row, index) => {
       return [
         index + 1,
+        row.number,
         row.lastname,
         row.middlename,
         row.firstname,
