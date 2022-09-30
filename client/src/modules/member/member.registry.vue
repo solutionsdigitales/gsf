@@ -41,7 +41,7 @@
           {{ $t("FORM.SELECT.EMPTY") }}
         </template>
 
-        <Column selectionMode="single" headerStyle="width: 3em"></Column>
+        <Column selectionMode="single"  style="max-width: 30px"></Column>
         <Column field="number" :header="$t('FORM.LABELS.NUMBER')">
           <template #body="{ data }">
             {{ data.number }}
