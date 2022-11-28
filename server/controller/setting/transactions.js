@@ -101,6 +101,7 @@ function lookUp(options) {
   filters.equals('payment_mode');
   filters.equals('currency');
   filters.equals('locked');
+  filters.equals('number');
   filters.equals('phone');
   filters.custom('member_uuid', 'm.uuid=?');
   filters.setOrder(' ORDER BY t.number DESC');

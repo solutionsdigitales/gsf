@@ -28,13 +28,14 @@ function lookUp(options) {
     JOIN  town t ON t.id = m.town_id
     LEFT JOIN  user u ON u.id = m.created_by
   `;
-
-  filters.equals('uuid');
-  filters.equals('lastname');
-  filters.equals('middlename');
-  filters.equals('firstname');
+  filters.equals('uuid');  
+  filters.equals('number');
+  filters.custom('lastname',  ` (m.lastname LIKE '${db.like(options, 'lastname')}') `);
+  filters.custom('middlename',  ` (m.middlename LIKE '${db.like(options, 'middlename')}') `);
+  filters.custom('firstname',  ` (m.firstname LIKE '${db.like(options, 'firstname')}') `);
   filters.equals('cellule_uuid');
   filters.setOrder(' ORDER BY m.created_at DESC ');
+
   return {
     sql: filters.applyQuery(sql),
     params: filters.parameters(),
