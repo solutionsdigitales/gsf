@@ -14,6 +14,8 @@ function myFilters() {
     { key: 'lastname', label: 'FORM.LABELS.NAME' },
     { key: 'middlename', label: 'FORM.LABELS.MIDDLE_NAME' },
     { key: 'firstname', label: 'FORM.LABELS.FIRST_NAME' },
+    { key: 'cellule', label: 'TREE.CELLULE' },
+    
   ]);
 
 

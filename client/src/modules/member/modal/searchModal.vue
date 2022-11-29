@@ -14,6 +14,24 @@
         <TabView>
           <TabPanel :header="$t('FORM.LABELS.SEARCH_QUERIES')">
             <div class="col-p12 padding0">
+
+              
+              <div class="p-field">
+                <label for="cellule">
+                  {{ $t("TREE.CELLULE") }}
+                </label>
+                <Dropdown
+                  inputId="cellule"
+                  :filter="true"
+                  style="padding: 2px"
+                  class="col-12"
+                  v-model="selectedCellule"
+                  @change="setCellule()"
+                  :options="cellules"
+                  optionLabel="name"
+                />
+              </div>
+              <br/>
               <div class="p-field">
                 <label for="number">{{ $t("FORM.LABELS.NUMBER") }}</label>
                 <InputText
@@ -50,15 +68,6 @@
                 />
               </div>
               
-              <br/>
-              <div class="p-field">
-                <label for="item_description">{{ $t("FORM.LABELS.DESCRIPTION") }}</label>
-                <InputText
-                  id="item_description"
-                  class="col-12"
-                  v-model="search.customFilters.item_description"
-                />
-              </div>
             </div>
           </TabPanel>
           <TabPanel :header="$t('FORM.LABELS.DEFAULTS')">
@@ -102,6 +111,7 @@ import Store from "../../../service/store";
 import searchUtil from "../../../service/searchModalUtil";
 import PeriodUtil from "../../../service/period";
 import periodSelect from "../../../components/periodSelect.vue";
+import CelluleService from "../../cellule/cellule.service";
 
 export default defineComponent({
   number: "SearchModal",
@@ -125,9 +135,9 @@ export default defineComponent({
         searchQueries: {},
       },
       selectedLocation: null,
-      selectedProject: {},
+      selectedCellule: {},
       locations: [],
-      projects: [],
+      cellules: [],
       employees: [],
     };
   },
@@ -139,7 +149,18 @@ export default defineComponent({
       }
     },
   },
+  mounted() {
+    this.init();
+  },
   methods: {
+     init() {
+      CelluleService.read().then(cellues => {
+        this.cellules = cellues.map(cellule => {
+          cellule.name = `${cellule.number} - ${cellule.name}`;
+          return  cellule;
+        });
+      });
+     },
     submit() {
       const loggedChanges = searchUtil.getChanges(
         Object.assign(
@@ -157,20 +178,29 @@ export default defineComponent({
       this.changes = new Store({ identifier: "key" });
       const _defaults = ["limit", "period"];
       const _customs = [
-        "number", 'lastname', 'middlename', 'firstname'
+        "number", 'lastname', 'middlename', 'firstname', 'cellule'
       ];
 
       searchUtil.setFilters(this, _defaults, "defaultFilters");
       searchUtil.setFilters(this, _customs, "customFilters");
+
+       searchUtil.setDropDownValue(
+        this,
+        "cellule",
+        this.cellules,
+        "selectedCellule",
+        "uuid",
+        "name"
+      );
     },
 
     setLocation() {
       this.search.customFilters.location = this.selectedLocation.uuid;
       this.displayValues.location = this.selectedLocation.name;
     },
-    setProject() {
-      this.search.customFilters.project = this.selectedProject.uuid;
-      this.displayValues.project = this.selectedProject.name;
+    setCellule() {
+      this.search.customFilters.cellule = this.selectedCellule.uuid;
+      this.displayValues.cellule = this.selectedCellule.name;
     },
     onSelectPeriod(period) {
       const periodKeys = PeriodUtil.processFilterChanges(period);

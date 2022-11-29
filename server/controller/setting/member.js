@@ -2,7 +2,7 @@ const util = require('../../lib/util');
 const db = require('../../lib/db');
 const FilterParser = require('../../lib/filter');
 
-const uuidToConvert = ['uuid', 'cellule_uuid', 'created_by'];
+const uuidToConvert = ['uuid', 'cellule_uuid', 'cellule', 'created_by'];
 
 function read(req, res, next) {
   const options = req.query;
@@ -34,6 +34,7 @@ function lookUp(options) {
   filters.custom('middlename',  ` (m.middlename LIKE '${db.like(options, 'middlename')}') `);
   filters.custom('firstname',  ` (m.firstname LIKE '${db.like(options, 'firstname')}') `);
   filters.equals('cellule_uuid');
+  filters.custom('cellule', 'c.uuid = ?');
   filters.setOrder(' ORDER BY m.created_at DESC ');
 
   return {
