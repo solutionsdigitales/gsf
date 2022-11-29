@@ -71,7 +71,7 @@
         <Column
           field="fullname"
           :header="$t('FORM.LABELS.LAST_NAME')"
-          style="min-width: 250px"
+          style="min-width: 210px"
         >
           <template #body="{ data }">
             {{ data.fullname }}
@@ -86,6 +86,8 @@
             />
           </template>
         </Column>
+        
+        <Column field="joining_date" :header="$t('FORM.LABELS.JOINING_DATE')"></Column>
         <Column field="gender" :header="$t('FORM.LABELS.GENDER')"></Column>
         <Column field="address" :header="$t('FORM.LABELS.ADDRESS')"></Column>
         <Column
@@ -202,6 +204,10 @@ export default {
     }
   },
   methods: {
+    formatDate(date) {
+      if (!date) return;
+      return UtilService.formatDate(date, "DD/MM/YYYY");
+    },
     getMembers() {
       this.loading = true;
       const params = this.filters.formatHTTP(true) || {};
@@ -210,6 +216,7 @@ export default {
           this.members = members.map((m) => {
             m.fullname = `${m.lastname} ${m.middlename || ""} ${m.firstname}`;
             m.cellule = `${m.cellule_number} - ${m.cellule_name}`;
+            m.joining_date = this.formatDate(m.joining_date);
             return m;
           });
         })

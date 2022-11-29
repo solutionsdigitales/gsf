@@ -222,12 +222,22 @@ export default {
             t.member_fullname = `${t.member_number} -  ${t.member_lastname}  ${
               t.member_middlename || ""
             } ${t.member_firstname}`;
+            t.date = this.formatDate1(t.date);
+            t.created_at = this.formatDate2(t.created_at);
             return t;
           });
         })
         .finally(() => {
           this.loading = false;
         });
+    },
+    formatDate1(date) {
+      if (!date) return;
+      return UtilService.formatDate(date, "DD/MM/YYYY");
+    },
+     formatDate2(date) {
+      if (!date) return;
+      return UtilService.formatDate(date, "DD/MM/YYYY H:mm:s");
     },
     onRemoveFilter(filter) {
       this.filters.resetFilterState(filter._key);

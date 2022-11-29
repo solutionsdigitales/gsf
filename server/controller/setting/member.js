@@ -19,7 +19,7 @@ function lookUp(options) {
     SELECT 
         BUID(m.uuid) as uuid, m.lastname, m.middlename, m.firstname,
         m.address, m.profession, m.phone, m.gender, m.email, FORMAT_ENTITY_NUMBER(m.number) as number,
-        m.joining_date, m.created_at,
+        FORMAT_DATE(m.joining_date) as joining_date, m.created_at,
         m.town_id, t.name as town_name, 
         BUID(m.cellule_uuid) AS cellule_uuid, c.name as cellule_name, FORMAT_ENTITY_NUMBER(c.number) as cellule_number,
         BUID(u.id) as created_by, u.name as user_name
