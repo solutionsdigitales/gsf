@@ -72,25 +72,6 @@
         />
       </div>
 
-      <div class="p-field">
-        <label
-          for="amount"
-          :class="{ 'p-error': validationErrors.amount && submitted }"
-        >
-          {{ $t("FORM.LABELS.AMOUNT") }}
-        </label>
-
-        <InputNumber
-          id="amount"
-          v-on:input="validate()"
-          :minFractionDigits="2"
-          v-model="selectedTransaction.amount"
-          :class="{
-            'p-invalid': validationErrors.amount && submitted,
-          }"
-        />
-      </div>
-
       <div class="p-field" v-if="selectedPrice.is_periodic">
         <label
           for="month"
@@ -99,13 +80,14 @@
         >
           {{ $t("FORM.LABELS.MONTH") }}
         </label>
-        <Dropdown
+        <MultiSelect
           id="month"
-          v-model="selectedMonth"
+          v-model="selectedMonths"
           @change="setMonth()"
           :options="months"
           :filter="true"
           optionLabel="label"
+           display="chip"
         />
       </div>
 
@@ -124,6 +106,26 @@
           :options="years"
           :filter="true"
           optionLabel="id"
+        />
+      </div>
+
+
+      <div class="p-field">
+        <label
+          for="amount"
+          :class="{ 'p-error': validationErrors.amount && submitted }"
+        >
+          {{ $t("FORM.LABELS.AMOUNT") }}
+        </label>
+
+        <InputNumber
+          id="amount"
+          v-on:input="validate()"
+          :minFractionDigits="2"
+          v-model="selectedTransaction.amount"
+          :class="{
+            'p-invalid': validationErrors.amount && submitted,
+          }"
         />
       </div>
 
@@ -206,7 +208,7 @@ export default defineComponent({
       submitted: false,
       loading: false,
       months: [],
-      selectedMonth: {},
+      selectedMonths: [],
       selectedYear: {},
       years: [
         {
@@ -249,10 +251,12 @@ export default defineComponent({
       this.validate();
     },
     setMonth() {
-      this.selectedTransaction.month = this.selectedMonth.id;
+      this.selectedTransaction.months = this.selectedMonths.map(m => m.id);
+      this.setAmount();
     },
     setYear() {
       this.selectedTransaction.year = this.selectedYear.id;
+      this.setAmount();
     },
     setCurrency() {
       this.selectedTransaction.currency_id = this.selectedCurrency.id;
@@ -271,6 +275,9 @@ export default defineComponent({
         });
         const rate = (rates[0] || {}).buy_rate || 1;
         this.selectedTransaction.amount = this.selectedPrice.amount * rate;
+        if (this.selectedPrice.is_periodic) {
+          this.selectedTransaction.amount *= this.selectedMonths.length;
+        }
       }
     },
     submit() {
@@ -347,7 +354,7 @@ export default defineComponent({
         'date',
       ];
       if (this.selectedPrice.is_periodic) {
-        fields.push('month', 'year');
+        fields.push('months', 'year');
       }
       fields.forEach((field) => {
         if (this.selectedTransaction[field]) {

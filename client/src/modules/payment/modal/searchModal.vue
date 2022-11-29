@@ -15,23 +15,15 @@
           <TabPanel :header="$t('FORM.LABELS.SEARCH_QUERIES')">
             <div class="col-p12 padding0">
               <div class="p-field">
-                <label for="number">{{ $t("FORM.LABELS.NUMBER") }}</label>
+                <label for="membre_number">{{ $t("TREE.MEMBERS") }}</label>
                 <InputText
-                  id="number"
+                  id="membre_number"
                   class="col-12"
-                  v-model="search.customFilters.number"
+                   placeholder="Numero"
+                  v-model="search.customFilters.membre_number"
                 />
               </div>
               <br />
-              <br/>
-              <div class="p-field">
-                <label for="item_description">{{ $t("FORM.LABELS.DESCRIPTION") }}</label>
-                <InputText
-                  id="item_description"
-                  class="col-12"
-                  v-model="search.customFilters.item_description"
-                />
-              </div>
             </div>
           </TabPanel>
           <TabPanel :header="$t('FORM.LABELS.DEFAULTS')">
@@ -130,7 +122,7 @@ export default defineComponent({
       this.changes = new Store({ identifier: "key" });
       const _defaults = ["limit", "period"];
       const _customs = [
-        "number",
+        "membre_number",
       ];
 
       searchUtil.setFilters(this, _defaults, "defaultFilters");

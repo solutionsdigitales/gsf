@@ -10,7 +10,7 @@ function myFilters() {
   service.registerDefaultFilters(Constants.defaultFilters);
   // custom filters can be optionally applied
   service.registerCustomFilters([
-    { key: 'number', label: 'FORM.LABELS.NUMBER' },
+    { key: 'membre_number', label: 'TREE.MEMBERS' },
   ]);
 
 

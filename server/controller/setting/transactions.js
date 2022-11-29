@@ -1,5 +1,6 @@
 
 const db = require('../../lib/db');
+const _ = require('lodash');
 const FilterParser = require('../../lib/filter');
 
 
@@ -47,10 +48,30 @@ function create(req, res, next) {
 
 async function createProcess(data) {
   db.convert(data, uuidToConvert);
+  const sql = 'INSERT INTO transactions SET ?';
+  if(data.months) {
+    const months = _.clone(data.months);
+    delete data.months;
+    
+    const transaction = db.transaction();
+    const transactionNumber = await getMaxNumber();
+    let monthIteration = 0;
+    for(const month of months) {
+      let _data = Object.assign({}, data);
+      _data.uuid = db.bid(db.uuidString());
+      _data.number = transactionNumber + monthIteration;
+      _data.month = month;
+      _data.amount = data.amount/months.length;
+      transaction.addQuery(sql, _data);
+      monthIteration++;
+    }
+    return transaction.execute();
+  } else {
   data.uuid = db.bid(data.uuid ? data.uuid : db.uuidString());
   data.number = await getMaxNumber();
-  const sql = 'INSERT INTO transactions SET ?';
+  
   return db.exec(sql, data);
+  }
 }
 
 function update(req, res, next) {
@@ -103,6 +124,7 @@ function lookUp(options) {
   filters.equals('locked');
   filters.equals('number');
   filters.equals('phone');
+  filters.custom('membre_number', 'm.number = ?');
   filters.custom('member_uuid', 'm.uuid=?');
   filters.setOrder(' ORDER BY t.number DESC');
 
