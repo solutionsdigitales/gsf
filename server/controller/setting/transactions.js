@@ -134,6 +134,22 @@ function lookUp(options) {
   }
 }
 
+
+
+function summery(req, res, next) {
+  const sql = `
+    SELECT transaction_type, SUM(amount) AS 'amount', currency
+    FROM transactions
+    WHERE transactions.locked = 0 
+    GROUP BY transaction_type, currency
+    ORDER BY transaction_type;
+  `;
+
+  db.exec(sql).then(results => {
+    res.status(200).json(results);
+  }).catch(next);
+
+}
 module.exports = {
-  read, create, update, detail, lookUp, delete : remove
+  read, create, update, detail, lookUp, delete : remove, summery
 }

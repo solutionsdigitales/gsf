@@ -90,6 +90,7 @@ class Routes {
     app.put('/transactions/:uuid', setting.transactions.update);
     app.get('/transactions', setting.transactions.read);
     app.get('/transactions/:uuid', setting.transactions.detail);
+    app.get('/transactions/get/overyview', setting.transactions.summery);
     app.delete('/transactions/:uuid', setting.transactions.delete);
     app.get('/transactions/download/excel', setting.transactionsDownload.exportToExcel);
   }

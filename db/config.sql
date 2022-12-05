@@ -15,7 +15,8 @@ INSERT INTO `page` (`code`, `label`, `url`, `isTreeItem`, `module_id`)  VALUES
 ('conf.002', 'TREE.ROLE', 'roles', 1, 2),
 ('conf.0021', 'TREE.CELLULE', 'cellules', 1, 2),
 ('conf.003', 'TREE.MEMBERS', 'members', 1, 2),
-('conf.004', 'TREE.PAYMENT', 'payments', 1, 2);
+('conf.004', 'TREE.PAYMENT', 'payments', 1, 2),
+('dash.001', 'TREE.DASHBOARD', 'dashboard', 1, 1);
 
 
 INSERT INTO`actions` (`id`,`description`) VALUES

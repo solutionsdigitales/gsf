@@ -1,8 +1,8 @@
 <template>
-  <div style="text-align: right">
+  <div style="text-align: right !important; padding:2px; width:100%">
     <div @click="toggle" class="link">
-      <span style="font-size: 14px">Actions</span>
-      <i class="link pi pi-chevron-down" style="fontsize: 1rem"> </i>
+      <span style="font-size: 12px">Actions</span>
+      <i class="link pi pi-chevron-down" style="fontsize: 10px"> </i>
     </div>
     <Menu ref="menu" :model="items" :popup="true" />
 

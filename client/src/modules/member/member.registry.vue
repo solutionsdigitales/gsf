@@ -53,7 +53,7 @@
           {{ $t("FORM.SELECT.EMPTY") }}
         </template>
 
-        <Column selectionMode="single" style="max-width: 20px"></Column>
+        <Column selectionMode="single" style="max-width: 30px"></Column>
         <Column field="number" :header="$t('FORM.LABELS.NUMBER')">
           <template #body="{ data }">
             {{ data.number }}
@@ -87,8 +87,8 @@
           </template>
         </Column>
         
-        <Column field="joining_date" :header="$t('FORM.LABELS.JOINING_DATE')"></Column>
-        <Column field="gender" :header="$t('FORM.LABELS.GENDER')"></Column>
+        <Column field="joining_date" style="min-width: 120px" :header="$t('FORM.LABELS.JOINING_DATE')"></Column>
+        <Column field="gender"  style="max-width: 50px" :header="$t('FORM.LABELS.GENDER')"></Column>
         <Column field="address" :header="$t('FORM.LABELS.ADDRESS')"></Column>
         <Column
           field="profession"
@@ -96,7 +96,6 @@
         ></Column>
         <Column field="town_id" :header="$t('TREE.TOWN')"></Column>
         <Column field="phone" :header="$t('FORM.LABELS.PHONE')"></Column>
-        <Column field="email" :header="$t('FORM.LABELS.EMAIL')"></Column>
         <Column field="cellule" :header="$t('TREE.CELLULE')">
           <template #body="e">
             <span>{{ e.data.cellule }}</span>
@@ -113,7 +112,7 @@
           </template>
         </Column>
 
-        <Column field="action" header="Action" style="width: 100px">
+        <Column field="action" header="Action" style="width: 60px">
           <template #body="e">
             <memberActions
               :entity="e.data"
