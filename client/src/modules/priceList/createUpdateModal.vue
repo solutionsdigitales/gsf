@@ -63,6 +63,33 @@
           {{ $t("FORM.LABELS.PERIODIC") }}
         </label>
       </div>
+
+         <br />
+      <div class="p-field-checkbox">
+        <Checkbox
+          id="is_debt"
+          :binary="true"
+          name="is_debt"
+          v-model="selectedPricing.is_debt"
+        />
+        <label for="is_debt">
+          {{ $t("FORM.LABELS.DEBT") }}
+        </label>
+      </div>
+
+
+         <br />
+      <div class="p-field-checkbox">
+        <Checkbox
+          id="is_refund"
+          :binary="true"
+          name="is_refund"
+          v-model="selectedPricing.is_refund"
+        />
+        <label for="is_refund">
+          {{ $t("FORM.LABELS.REFUND") }}
+        </label>
+      </div>
       </div>
     </form>
     <template #footer>
@@ -153,6 +180,8 @@ export default defineComponent({
       if (!this.pricing.uuid) return;
       PricingService.read(this.pricing.uuid).then((pricing) => {
         pricing.is_periodic = !!pricing.is_periodic;
+        pricing.is_debt = !!pricing.is_debt;
+        pricing.is_refund = !!pricing.is_refund;
         this.selectedPricing = pricing;
         console.log(pricing);
       });

@@ -1,5 +1,9 @@
 ALTER TABLE `pricing` ADD `is_periodic` TINYINT(2);
 
 -- 05/12/2022
-INSERT INTO `page` (`code`, `label`, `url`, `isTreeItem`, `module_id`)  VALUES
-('dash.001', 'TREE.DASHBOARD', 'dashboard', 1, 1);
+ALTER TABLE `pricing` 
+    ADD `is_debt` TINYINT(2) DEFAULT 0,
+    ADD `is_refund` TINYINT(2) DEFAULT 0;
+ALTER TABLE `transactions`
+    ADD KEY `year`(`year`),
+    ADD KEY `month`(`month`);

@@ -9,6 +9,9 @@ import membreFilters from './membre.filters';
 function MemberService() {
   const service = new PrototypeApiService('/members');
   service.filters = membreFilters;
+
+  service.count = () => service.get('/counting/number');
+  
   return service;
 }
 

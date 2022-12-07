@@ -14,7 +14,8 @@ db.convert(options, ['uuid']);
   const filters = new FilterParser(options, { tableAlias: 'p' });
   let sql = `
     SELECT 
-        BUID(p.uuid) AS uuid, p.name, p.amount, p.is_periodic
+        BUID(p.uuid) AS uuid, p.name, 
+        p.amount, p.is_periodic,  is_debt, is_refund
     FROM pricing as p
   `;
   filters.equals('uuid');
@@ -32,7 +33,7 @@ db.convert(options, ['uuid']);
 function detail(req, res, next) {
   const sql = `
   SELECT 
-    BUID(uuid) as uuid, name, amount, is_periodic
+    BUID(uuid) as uuid, name, amount, is_periodic, is_debt, is_refund
     FROM pricing
     WHERE uuid = ?
     `;

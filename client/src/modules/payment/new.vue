@@ -38,7 +38,7 @@
           class="label-required"
           :class="{ 'p-error': validationErrors.pricing_uuid && submitted }"
         >
-          {{ $t("FORM.LABELS.PRICE_LIST") }}
+          {{ $t("FORM.LABELS.OPERATION") }}
         </label>
         <Dropdown
           id="pricing"
@@ -72,6 +72,24 @@
         />
       </div>
 
+    <div class="p-field" v-if="selectedPrice.is_periodic">
+        <label
+          for="year"
+          class="label-required"
+          :class="{ 'p-error': validationErrors.year && submitted }"
+        >
+          {{ $t("FORM.LABELS.YEAR") }}
+        </label>
+        <Dropdown
+          id="year"
+          v-model="selectedYear"
+          @change="setYear()"
+          :options="years"
+          :filter="true"
+          optionLabel="id"
+        />
+      </div>
+
       <div class="p-field" v-if="selectedPrice.is_periodic">
         <label
           for="month"
@@ -91,24 +109,7 @@
         />
       </div>
 
-      <div class="p-field" v-if="selectedPrice.is_periodic">
-        <label
-          for="year"
-          class="label-required"
-          :class="{ 'p-error': validationErrors.year && submitted }"
-        >
-          {{ $t("FORM.LABELS.YEAR") }}
-        </label>
-        <Dropdown
-          id="year"
-          v-model="selectedYear"
-          @change="setYear()"
-          :options="years"
-          :filter="true"
-          optionLabel="id"
-        />
-      </div>
-
+  
 
       <div class="p-field">
         <label

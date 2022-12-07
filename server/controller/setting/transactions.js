@@ -5,7 +5,10 @@ const FilterParser = require('../../lib/filter');
 
 
 // database connection
-const uuidToConvert = ['uuid', 'member_uuid', 'user_id', 'pricing_uuid'];
+const uuidToConvert = [
+  'uuid', 'member_uuid', 'user_id',
+  'pricing_uuid', 'pricing', 'membre_cellule'
+];
 
 function read(req, res, next) {
   const options = req.query;
@@ -123,8 +126,13 @@ function lookUp(options) {
   filters.equals('currency');
   filters.equals('locked');
   filters.equals('number');
+  filters.custom('pricing', 't.pricing_uuid = ?');
   filters.equals('phone');
+  filters.equals('year');
+  filters.equals('month');
   filters.custom('membre_number', 'm.number = ?');
+  filters.custom('membre_cellule', 'm.cellule_uuid = ?');
+  
   filters.custom('member_uuid', 'm.uuid=?');
   filters.setOrder(' ORDER BY t.number DESC');
 
@@ -150,6 +158,19 @@ function summery(req, res, next) {
   }).catch(next);
 
 }
+
+
+// delete a member
+function count(req, res, next) {
+  db.one(`
+    SELECT count(uuid) as nbr 
+    FROM transactions
+    WHERE transactions.locked = 0`).then((result) => {
+    res.status(200).json(result);
+  }).catch(next);
+}
+
+
 module.exports = {
-  read, create, update, detail, lookUp, delete : remove, summery
+  read, create, update, detail, lookUp, delete : remove, summery, count
 }

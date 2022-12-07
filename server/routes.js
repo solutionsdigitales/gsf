@@ -72,6 +72,7 @@ class Routes {
     app.get('/members', setting.member.read);
     app.get('/members/:uuid', setting.member.detail);
     app.get('/members/download/excel', setting.memberDownload.exportToExcel);
+    app.get('/members/counting/number', setting.member.count);
 
     app.post('/cellules', setting.cellule.create);
     app.put('/cellules/:uuid', setting.cellule.update);
@@ -91,6 +92,7 @@ class Routes {
     app.get('/transactions', setting.transactions.read);
     app.get('/transactions/:uuid', setting.transactions.detail);
     app.get('/transactions/get/overyview', setting.transactions.summery);
+    app.get('/transactions/counting/number', setting.transactions.count);
     app.delete('/transactions/:uuid', setting.transactions.delete);
     app.get('/transactions/download/excel', setting.transactionsDownload.exportToExcel);
   }

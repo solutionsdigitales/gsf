@@ -234,6 +234,8 @@ CREATE TABLE `pricing`(
   `name` VARCHAR(255) NOT NULL,
   `amount` DECIMAL(19,4) NOT NULL,
   `is_periodic` TINYINT(2),
+  `is_debt` TINYINT(2),
+  `is_refund` TINYINT(2),
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_update` DATETIME NULL,
   PRIMARY KEY (`uuid`)
@@ -266,5 +268,7 @@ CREATE TABLE `transactions`(
   KEY `pricing_uuid`(`pricing_uuid`),
   KEY `user_id`(`user_id`),
   KEY `status`(`status`),
+  KEY `year`(`year`),
+  KEY `month`(`month`),
   CONSTRAINT `transaction__currency` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;

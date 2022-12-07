@@ -7,6 +7,7 @@ function PaymentService() {
   service.summery = () => {
     return service.get('/get/overyview');
   }
+  service.count = () => service.get('/counting/number');
   service.filters = payFilters;
   return service;
 }

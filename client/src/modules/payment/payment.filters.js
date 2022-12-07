@@ -11,6 +11,10 @@ function myFilters() {
   // custom filters can be optionally applied
   service.registerCustomFilters([
     { key: 'membre_number', label: 'TREE.MEMBERS' },
+    { key: 'pricing', label: 'Opération' },
+    { key: 'cellule', label: 'TREE.CELLULE' },    
+    { key: 'month', label: 'FORM.LABELS.MONTH' }, 
+    { key: 'year', label: 'FORM.LABELS.YEAR' },
   ]);
 
 

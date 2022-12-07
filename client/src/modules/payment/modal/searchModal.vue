@@ -19,11 +19,75 @@
                 <InputText
                   id="membre_number"
                   class="col-12"
-                   placeholder="Numero"
+                  placeholder="Numero"
                   v-model="search.customFilters.membre_number"
                 />
               </div>
               <br />
+              <div class="p-field">
+                <label for="pricing">
+                  {{ $t("Opération") }}
+                </label>
+                <Dropdown
+                  inputId="pricing"
+                  :filter="true"
+                  style="padding: 2px"
+                  class="col-12"
+                  v-model="selectedPricing"
+                  @change="setPricing()"
+                  :options="pricingList"
+                  optionLabel="name"
+                />
+              </div>
+              <br />
+              <div class="p-field">
+                <label for="cellule">
+                  {{ $t("TREE.CELLULE") }}
+                </label>
+                <Dropdown
+                  inputId="cellule"
+                  :filter="true"
+                  style="padding: 2px"
+                  class="col-12"
+                  v-model="selectedCellule"
+                  @change="setCellule()"
+                  :options="cellules"
+                  optionLabel="name"
+                />
+              </div>
+
+              <br />
+
+              <div class="p-field">
+                <label for="year">
+                  {{ $t("FORM.LABELS.YEAR") }}
+                </label>
+                <Dropdown
+                  id="year"
+                  class="col-12"
+                  v-model="selectedYear"
+                  @change="setYear()"
+                  :options="years"
+                  :filter="true"
+                  optionLabel="id"
+                />
+              </div>
+              <br/>
+              <div class="p-field">
+                <label for="month">
+                  {{ $t("FORM.LABELS.MONTH") }}
+                </label>
+                <Dropdown
+                  id="month"
+                  class="col-12"
+                  v-model="selectedMonth"
+                  @change="setMonth()"
+                  :options="months"
+                  optionLabel="label"
+                  display="chip"
+                />
+                <br/>
+              </div>
             </div>
           </TabPanel>
           <TabPanel :header="$t('FORM.LABELS.DEFAULTS')">
@@ -67,6 +131,9 @@ import Store from "../../../service/store";
 import searchUtil from "../../../service/searchModalUtil";
 import PeriodUtil from "../../../service/period";
 import periodSelect from "../../../components/periodSelect.vue";
+import PricingService from "../../priceList/price.service";
+import CelluleService from "../../cellule/cellule.service";
+import constants from "../../../service/constant";
 
 export default defineComponent({
   number: "SearchModal",
@@ -82,18 +149,28 @@ export default defineComponent({
     return {
       displayValues: {},
       lastDisplayValues: {},
-      selectedEmployee : {},
+      selectedEmployee: {},
       filterMap: {},
       search: {
         defaultFilters: {},
         changes: null,
         searchQueries: {},
       },
+
       selectedLocation: null,
-      selectedProject: {},
-      locations: [],
-      projects: [],
-      employees: [],
+      selectedPricing: {},
+      selectedCellule: {},
+      cellules: [],
+      pricingList: [],
+      months: [],
+      selectedMonth: {},
+      selectedYear: {},
+      years: [
+        {
+          id: 2022,
+        },
+        { id: 2023 },
+      ],
     };
   },
   watch: {
@@ -104,7 +181,30 @@ export default defineComponent({
       }
     },
   },
+  mounted() {
+    this.init();
+  },
+  created() {
+    this.months = [];
+    constants.MONTHS.forEach((m) => {
+      this.months.push({
+        id: m,
+        label: this.$t(`TABLE.COLUMNS.DATE_MONTH.${m}`),
+      });
+    });
+  },
   methods: {
+    init() {
+      PricingService.read().then((list) => {
+        this.pricingList = list;
+      });
+      CelluleService.read().then((cellues) => {
+        this.cellules = cellues.map((cellule) => {
+          cellule.name = `${cellule.number} - ${cellule.name}`;
+          return cellule;
+        });
+      });
+    },
     submit() {
       const loggedChanges = searchUtil.getChanges(
         Object.assign(
@@ -121,46 +221,40 @@ export default defineComponent({
     loadFilters() {
       this.changes = new Store({ identifier: "key" });
       const _defaults = ["limit", "period"];
-      const _customs = [
-        "membre_number",
-      ];
+      const _customs = ["membre_number", "pricing", "cellule", "year", "month"];
 
       searchUtil.setFilters(this, _defaults, "defaultFilters");
       searchUtil.setFilters(this, _customs, "customFilters");
 
       searchUtil.setDropDownValue(
         this,
-        "location",
-        this.locations,
-        "selectedLocation",
+        "pricing",
+        this.pricingList,
+        "selectedPricing",
         "uuid",
         "name"
       );
       searchUtil.setDropDownValue(
         this,
-        "employee_uuid",
-        this.employees,
-        "selectedEmployee",
-        "uuid",
-        "displayname"
-      );
-      searchUtil.setDropDownValue(
-        this,
-        "project",
-        this.projects,
-        "selectedProject",
+        "cellule",
+        this.cellules,
+        "selectedCellule",
         "uuid",
         "name"
       );
     },
 
-    setLocation() {
-      this.search.customFilters.location = this.selectedLocation.uuid;
-      this.displayValues.location = this.selectedLocation.name;
+    setYear() {
+      this.search.customFilters.year = this.selectedYear.id;
     },
-    setProject() {
-      this.search.customFilters.project = this.selectedProject.uuid;
-      this.displayValues.project = this.selectedProject.name;
+
+    setMonth() {
+      this.search.customFilters.month = this.selectedMonth.id;
+      this.displayValues.month = this.selectedMonth.label;
+    },
+    setCellule() {
+      this.search.customFilters.cellule = this.selectedCellule.uuid;
+      this.displayValues.cellule = this.selectedCellule.name;
     },
     onSelectPeriod(period) {
       const periodKeys = PeriodUtil.processFilterChanges(period);
@@ -175,6 +269,11 @@ export default defineComponent({
         customFilters: {},
       };
     },
+    setPricing() {
+      this.search.customFilters.pricing = this.selectedPricing.uuid;
+      this.displayValues.pricing = this.selectedPricing.name;
+    },
+
     closeDialog() {
       this.reset();
       this.close(false);

@@ -41,7 +41,7 @@
         :loading="loading"
       >
         <template #header>
-          {{ $t("TREE.PAYMENT") }}
+          {{ $t("TREE.TRANSACTIONS") }}
           <div class="col-12 noLeft">
             <bhFilters
               :filters="latestViewFilters"
@@ -60,7 +60,7 @@
         <Column
           field="locked"
           :header="$t('FORM.LABELS.STATUS')"
-          style="width: 1%; padding: 0px"
+          style=" padding: 0px"
         >
           <template #body="e">
             <div style="height: 10px" class="w100">

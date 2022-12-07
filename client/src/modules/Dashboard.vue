@@ -33,7 +33,7 @@
           <div>
             <span class="block text-500 font-medium mb-3">Membres</span>
             <div class="text-900 font-medium text-xl">
-              {{ customers.length }}
+              {{ customerNumber }}
             </div>
           </div>
           <div
@@ -60,7 +60,7 @@
           <div>
             <span class="block text-500 font-medium mb-3">Transactions</span>
             <div class="text-900 font-medium text-xl">
-              {{ transactions.length }}
+              {{ transactionNumber }}
             </div>
           </div>
           <div
@@ -342,9 +342,8 @@ export default defineComponent({
       ],
       revenue: { USD: 0, CDF: 0 },
       revenueByPaymentMethod: "",
-      transactions: [],
-      resetTransactions: [],
-      customers: [],
+      transactionNumber: 0,
+      customerNumber: 0,
       thisWeekLeterNumber: 0,
       lastWeekLeterNumber: 0,
       cardSellTendance: 0,
@@ -356,28 +355,15 @@ export default defineComponent({
   created() {
     this.productService = new ProductService();
 
-    customerService.read().then((customers) => (this.customers = customers));
-    TransactionService.read(null, {
-      ResultCode: "OUI",
-    }).then((data) => {
-      this.transactions = data;
-      this.revenue = {
-        USD: 0,
-        CDF: 0,
-      };
-      data.forEach((row) => {
-        this.revenue[row.currency] += row.amount;
-      });
+    customerService.count().then((result) => (this.customerNumber = result.nbr));
+    TransactionService.count().then((data) => {
+      this.transactionNumber = data.nbr;      
     });
 
     TransactionService.summery().then((rows) => {
       let html = `
       <table class="table table-bordered" style="width:100%; border : 1px solid #ddd">
-        <thead>
-        <tr>
-        <th></th>
-        <th>USD</th> <th>CDF</th> </tr>
-        </thead>
+       
         <tbody>
       `;
 
@@ -425,6 +411,12 @@ export default defineComponent({
         usd : util.round(currencyMap['USD'] || 0),
         cdf :util.round(currencyMap['CDF'] || 0)
       }
+
+      this.revenue = {
+        USD:  util.round(currencyMap['USD'] || 0),
+        CDF: util.round(currencyMap['CDF'] || 0)
+      };
+
       html += `
       </tbody>
       <tfooter>
@@ -445,85 +437,6 @@ export default defineComponent({
       this.revenueByPaymentMethod = html;
     });
 
-    // recent sells
-
-    TransactionService.read(null, {
-      ResultCode: "OUI",
-      transaction_type: "CARD_RECHARGE",
-      limit: 20,
-    }).then((data) => {
-      console.log(data);
-      this.resetTransactions = data;
-    });
-
-    // this week
-    /*TransactionService.volumeByPeriod().then((result) => {
-      this.thisWeekLeterNumber = result.thisWeek;
-      this.lastWeekLeterNumber = result.lastWeek;
-    });*/
-
-  
-/*
-    // tendance
-    TransactionService.tendance().then((result) => {
-      let totalTendance = 0;
-      let cardRecharPortiong = 0;
-      let cardActivationPortiong = 0;
-      result.forEach((row) => {
-        totalTendance += row.amount || 0;
-        if (row.transaction_type === "CARD_RECHARGE") {
-          cardRecharPortiong += row.amount;
-        }
-
-        if (row.transaction_type === "CARD_ACTIVATION") {
-          cardActivationPortiong += row.amount;
-        }
-      });
-      this.cardSellTendance = 0;
-      this.activationTendance = this.pourcentage(
-        totalTendance,
-        cardActivationPortiong
-      );
-      this.rechargeTendance = this.pourcentage(
-        totalTendance,
-        cardRecharPortiong
-      );
-    });
-
-    //annual revenue
-    TransactionService.annualRevenue().then((revenues) => {
-      const today = new Date();
-      const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-      ].slice(0, today.getMonth() + 1);
-      let dataSales = [];
-      let dataREvenue = [];
-
-      months.forEach((m) => {
-        const thisMonth = m.toUpperCase();
-        let _sale = 0;
-        let _rev = 0;
-        revenues.forEach((rv) => {
-          if (rv.month === thisMonth) {
-            _sale = rv.quantity;
-            _rev = rv.amount;
-          }
-        });
-
-        dataSales.push(_sale);
-        dataREvenue.push(_rev);
-      });
-
-      this.lineData.datasets[0].data = dataREvenue;
-      this.lineData.datasets[1].data = dataSales;
-    });
-  */
   },
   methods: {
     pourcentage(total, part) {

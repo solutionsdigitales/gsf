@@ -122,6 +122,14 @@ function remove(req, res, next) {
 }
 
 
+// delete a member
+function count(req, res, next) {
+  db.one('SELECT count(uuid) as nbr FROM member').then((result) => {
+    res.status(200).json(result);
+  }).catch(next);
+}
+
+
 module.exports = {
   read,
   detail,
@@ -129,4 +137,5 @@ module.exports = {
   lookUp,
   delete: remove,
   create,
+  count,
 };

@@ -29,7 +29,31 @@
       <Column selectionMode="single" headerStyle="width: 3em"></Column>
 
       <Column field="name" :header="$t('FORM.LABELS.LABEL')"></Column>
-      <Column field="amount" headerStyle="width: 16em" :header="$t('FORM.LABELS.AMOUNT')"/>     
+      <Column field="amount" headerStyle="width: 16em" :header="$t('FORM.LABELS.AMOUNT')"/> 
+      <Column field="is_periodic" headerStyle="width: 7em" :header="$t('FORM.LABELS.PERIODIC')">
+      <template #body="e">
+           <span>
+             {{$t(e.data.is_periodic ? 'FORM.LABELS.YES' : 'FORM.LABELS.NO')}}
+           </span>
+         </template>
+      </Column>
+
+      <Column field="is_debt" headerStyle="width: 7em" :header="$t('FORM.LABELS.DEBT')">
+      <template #body="e">
+           <span>
+             {{$t(e.data.is_debt ? 'FORM.LABELS.YES' : 'FORM.LABELS.NO')}}
+           </span>
+         </template>
+      </Column>
+
+      <Column field="is_refund" headerStyle="width: 7em" :header="$t('FORM.LABELS.REFUND')">
+      <template #body="e">
+           <span>
+             {{$t(e.data.is_refund ? 'FORM.LABELS.YES' : 'FORM.LABELS.NO')}}
+           </span>
+         </template>
+      </Column>
+
       <Column field="action" header="Action" style="width: 100px">
         <template #body="e">
           <priceActions 
