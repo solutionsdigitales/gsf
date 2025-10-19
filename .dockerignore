@@ -1,0 +1,22 @@
+# ignore node modules
+node_modules
+.git
+./mysql_data/
+
+# ignore loggin utilities
+npm-debug.log
+yarn-error.log
+# yarn.lock
+# ./client/yarn.lock
+.dist
+#./client/package-lock.json
+# ./server/yarn.lock
+#./server/package-lock.json
+
+# ignore documentation
+*.md
+
+# ignore unnecessary folders
+docs
+temp
+bin

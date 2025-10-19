@@ -75,7 +75,7 @@ function configureEnvironmentVariables() {
   dotEnv.config({ path: dotfile });
 }
 
-const port = process.env.PORT;
+const port = process.env.SERVER_PORT;
 app.listen(port);
 console.log(`app runs on port : ${port}`);
 

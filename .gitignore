@@ -13,7 +13,8 @@ server/upload
 server/node_modules/
 ./server/node_modules/
 
-
+./mysql_data/
+./data/
 .env
 ./.env
 
