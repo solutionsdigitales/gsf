@@ -1,5 +1,4 @@
 const md5 = require('md5');
-const msal = require('@azure/msal-node');
 const debug = require('debug')('imadata:msauth');
 const _ = require('lodash');
 const JWTConfig = require('../api/token');
