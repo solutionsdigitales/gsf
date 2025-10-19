@@ -102,7 +102,7 @@ COPY --from=build /app/client/dist /app/client/dist
 
 # Prune devDependencies to keep image small (optional if using separate prod lockfiles)
 WORKDIR /app/server
-RUN yarn install --frozen-lockfile --production=true --ignore-scripts && yarn cache clean
+RUN yarn install
 
 # Ensure ownership and drop privileges
 WORKDIR /app
