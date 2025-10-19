@@ -1,5 +1,5 @@
 # ---- base: build & runtime deps ----
-FROM node:20-bookworm-slim AS base
+FROM node:20 AS base
 
 ENV DEBIAN_FRONTEND=noninteractive
 # If you use Puppeteer, skip its chromium download (we install OS chromium)
