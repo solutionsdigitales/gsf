@@ -37,7 +37,7 @@ services:
       - DB_PORT=${DB_PORT}
       - UPLOAD_FOLDER=${UPLOAD_FOLDER}
     volumes:
-      - upload_dir:${UPLOAD_FOLDER}
+      - ${UPLOAD_FOLDER}:/app/data
     stdin_open: true
     tty: true
 
