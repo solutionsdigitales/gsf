@@ -24,9 +24,15 @@ RUN yarn policies set-version $YARN_VERSION
 WORKDIR /usr/src/app
 COPY package*.json yarn.lock ./
 COPY .env .
-RUN yarn install
 COPY . .
+WORKDIR /usr/src/app/server
+RUN yarn install
+
+WORKDIR /usr/src/app/client
+RUN yarn install
 RUN yarn build
+
+WORKDIR /usr/src/app
 
 # make sure the node user is the owner of all the underlying files.
 RUN chown -R node:node *
