@@ -33,7 +33,7 @@ RUN yarn install
 
 WORKDIR /usr/src/app
 COPY . .
-RUN yarn build
+RUN yarn run build
 # make sure the node user is the owner of all the underlying files.
 RUN chown -R node:node *
 
