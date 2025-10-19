@@ -2,10 +2,6 @@
 import axios from 'axios';
 import AppCache from "./appCache";
 
-const env = require('./../../.env.js');
-
-
-
 function unwrapHttpResponse(response) {
   return response.data;
 }
@@ -49,7 +45,7 @@ function pdfStreamRequest(url, method, param = {}) {
 export default class Api {
 
   constructor(url) {
-    this.server = process.env.NODE_ENV === 'production' ? '' : `http://127.0.0.1:${env.serverPort}`;
+    this.server = process.env.NODE_ENV === 'production' ? '' : import.meta.env.SERVER_PATH;
     this.url = this.server + url;
     this.$http = axios;
     this.unwrapHttpResponse = unwrapHttpResponse;
