@@ -62,15 +62,15 @@ COPY server/package.json server/
 COPY client/package.json client/
 
 # Install root deps if you have a root package.json (optional)
-RUN yarn install --frozen-lockfile --production=false
+RUN yarn install
 
 # Install server deps
 WORKDIR /app/server
-RUN yarn install --frozen-lockfile --production=false
+RUN yarn install
 
 # Install client deps
 WORKDIR /app/client
-RUN yarn install --frozen-lockfile --production=false
+RUN yarn install
 
 # ---- build: compile client, etc. ----
 FROM deps AS build
