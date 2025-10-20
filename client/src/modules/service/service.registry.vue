@@ -60,7 +60,7 @@
 
 <script>
 import serviceService from "./service.service";
-import userActions from "./actions";
+import userActions from "./actions.vue";
 import CreateUpdateModal from "./createUpdateModal.vue";
 import AppCache from "../../service/appCache";
 
