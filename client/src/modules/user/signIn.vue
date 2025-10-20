@@ -1,13 +1,7 @@
 <template>
-  <div class="form-demo">
-    <div class="header">
-      <div class="row">
-        <br />
-        <br />
-        <div class="p-d-flex p-jc-center">
-          <h1>GSF</h1>
-        </div>
-      </div>
+  <div class="form-demo" style="background-color: azure; height: 100vh;">
+    <div>
+
       <!--Content before waves-->
       <div class="inner-header flex">
         <!--Just the logo.. Don't mind this-->
@@ -20,128 +14,46 @@
                   <SwitchLanguage :dottes="true"></SwitchLanguage>
                 </div>
                 <center>
-                  <i
-                    class="pi pi-user iconProfil"
-                    :style="{ fontSize: '5rem', color: 'var(--black-100)' }"
-                  ></i>
+                  <i class="pi pi-user iconProfil" :style="{ fontSize: '5rem', color: 'var(--black-100)' }"></i>
                 </center>
               </div>
+              <div><b>GSF</b></div>
+              <span class="p-text-center">Authentification</span>
 
-              <h5 class="p-text-center">Authentification</h5>
-
-              <form @submit.prevent="handleSubmit()" class="p-fluid">
+              <form @submit.prevent="handleSubmit()" style="width: 100%;">
                 <div class="p-field">
                   <div class="p-float-label">
-                    <InputText
-                      id="name"
-                      v-on:input="validate()"
-                      v-model="user.name"
+                    <InputText id="name" v-on:input="validate()" placeholder="Nom d'utilisateur" v-model="user.name"
                       :class="{
                         'p-invalid': validationErrors.name && submitted,
-                      }"
-                    />
-                    <label
-                      for="name"
-                      :class="{ 'p-error': validationErrors.name && submitted }"
-                      >{{ $t("FORM.LABELS.EMAIL") }}*</label
-                    >
+                      }" />
+
                   </div>
                 </div>
 
                 <div class="p-field">
                   <div class="p-float-label">
-                    <Password
-                      id="password"
-                      v-model="user.password"
-                      :feedback="false"
-                      v-on:input="validate()"
-                      :class="{
+                    <Password id="password" v-model="user.password" :feedback="false" style="width: 100%;"
+                      placeholder="Mot de passe" v-on:input="validate()" :class="{
                         'p-invalid': validationErrors.password && submitted,
-                      }"
-                      toggleMask
-                    >
+                      }" toggleMask>
                     </Password>
-                    <label
-                      for="password"
-                      :class="{
-                        'p-error': validationErrors.password && submitted,
-                      }"
-                      >{{ $t("FORM.LABELS.PASSWORD") }}</label
-                    >
+
                   </div>
                 </div>
 
-                <Button
-                  id="submitButton"
-                  type="submit"
-                  :label="$t('FORM.BUTTONS.SIGN_IN')"
-                  class="p-mt-2"
-                  :disabled="loading"
-                />
+                <Button id="submitButton" type="submit"
+                 :label="$t('FORM.BUTTONS.SIGN_IN')" style="width: 100%;"
+                  :disabled="loading" />
 
                 <br /><br />
-               
+
               </form>
             </div>
           </div>
         </div>
       </div>
-
-      <!--Waves Container-->
-      <div>
-        <svg
-          version="1.1"
-          class="logo"
-          baseProfile="tiny"
-          id="Layer_1"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          x="0px"
-          y="0px"
-          viewBox="0 0 500 500"
-          xml:space="preserve"
-        ></svg>
-        <svg
-          class="waves"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          viewBox="0 24 150 28"
-          preserveAspectRatio="none"
-          shape-rendering="auto"
-        >
-          <defs>
-            <path
-              id="gentle-wave"
-              d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
-            />
-          </defs>
-          <g class="parallax">
-            <use
-              xlink:href="#gentle-wave"
-              x="48"
-              y="0"
-              fill="rgba(255,255,255,0.7"
-            />
-            <use
-              xlink:href="#gentle-wave"
-              x="48"
-              y="3"
-              fill="rgba(255,255,255,0.5)"
-            />
-            <use
-              xlink:href="#gentle-wave"
-              x="48"
-              y="5"
-              fill="rgba(255,255,255,0.3)"
-            />
-            <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
-          </g>
-        </svg>
-      </div>
-      <!--Waves end-->
     </div>
-    <!--Header ends-->
-
     <!--Content ends-->
   </div>
 </template>
@@ -165,10 +77,10 @@ export default defineComponent({
     };
   },
   created() {
-    const {by_msauth} = this.$route.query;
-    if(by_msauth) {
+    const { by_msauth } = this.$route.query;
+    if (by_msauth) {
       const clientInitiated = AppCache.get('msauth');
-      if(clientInitiated === `1`) {
+      if (clientInitiated === `1`) {
         this.getMsAuthInfo();
       }
     }
@@ -220,7 +132,7 @@ export default defineComponent({
       window.location = `${server}auth`;
     },
     getMsAuthInfo() {
-        this.loading = true;
+      this.loading = true;
       UserService.msauth()
         .then((res) => {
           NotifyService.success(this, null, `Welcome ${res.user.name}`);
@@ -269,6 +181,7 @@ export default defineComponent({
 .form-demo .card a {
   text-decoration: none !important;
 }
+
 .form-demo form {
   margin-top: 0rem;
   padding: 5px;
@@ -285,6 +198,7 @@ export default defineComponent({
   border-radius: 50%;
   padding: 30px;
 }
+
 @media screen and (max-width: 960px) {
   .card {
     width: 80%;
