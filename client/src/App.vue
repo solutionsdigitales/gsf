@@ -1,15 +1,10 @@
+<script setup></script>
+
 <template>
     <Toast position="top-right" />
-	<router-view/>
+    <router-view />
 </template>
 
-<script>
-export default {
-  created () {
-  }
-}
-
-</script>
 
 <style>
 body {

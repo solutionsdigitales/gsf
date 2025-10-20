@@ -1,10 +1,11 @@
 import 'primevue/resources/primevue.min.css';
-import 'primeflex/primeflex.css';
-import 'primeicons/primeicons.css';
-import 'prismjs/themes/prism-coy.css';
+// import 'primeflex/primeflex.css';
+// import 'primeicons/primeicons.css';
+// import 'prismjs/themes/prism-coy.css';
 import './assets/styles/layout.scss';
 import './assets/demo/flags/flags.css';
 
+import Aura from '@primeuix/themes/material';
 import { createApp, reactive } from 'vue';
 import { createI18n } from 'vue-i18n'
 
@@ -97,7 +98,7 @@ import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 
 import CodeHighlight from './AppCodeHighlight';
-import Help from './components/help';
+//import Help from './components/help';
 
 import store from './store';
 
@@ -116,14 +117,14 @@ app.use(ToastService);
 app.use(store);
 
 //--------------------------------
-const  langFr = require('./i18n/fr.json')
-const langEn = require('./i18n/en.json');
+import  langFr from  './i18n/fr.json'
+import langEn from './i18n/en.json';
 import AppCache from './service/appCache';
 
 let session = AppCache.get('session') || {};
 const i18n = createI18n({
     locale:  session.lg || 'fr',
-    fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'fr',
+    fallbackLocale: 'fr',
     messages : { fr : langFr,
         en : langEn
     }
@@ -131,7 +132,16 @@ const i18n = createI18n({
 });
 
 app.use(i18n);
-app.use(PrimeVue, { ripple: true, inputStyle: 'outlined' });
+
+app.use(PrimeVue, {
+    ripple: true, inputStyle: 'outlined',
+    theme: {
+        preset: Aura,
+        options: {
+            darkModeSelector: false || 'none'
+        }
+    }
+});
 app.use(router);
 
 app.directive('tooltip', Tooltip);
@@ -218,6 +228,6 @@ app.component('ToggleButton', ToggleButton);
 app.component('Tree', Tree);
 app.component('TreeTable', TreeTable);
 app.component('TriStateCheckbox', TriStateCheckbox);
-app.component('Help', Help);
+// app.component('Help', Help);
 
 app.mount('#app');

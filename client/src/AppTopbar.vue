@@ -14,7 +14,6 @@
     >
       <i class="pi pi-bars"></i>
     </button>
-
     <button
       class="p-link layout-topbar-menu-button layout-topbar-button"
       v-styleclass="{
@@ -59,7 +58,7 @@
 </template>
 
 <script>
-import SwitchLanguage from "./components/SwitchLanguage";
+import SwitchLanguage from "./components/SwitchLanguage.vue";
 import ChangePasswordModal from "./modules/user/change_pwd.vue";
 
 
@@ -73,7 +72,7 @@ export default {
     };
   },
   created() {
-    this.connectedUser = this.$store.state.session.user || {};
+    this.connectedUser = (this.$store.state.session|| {}).user || {};
     this.userName = this.connectedUser.name;
     if (this.connectedUser.is_employee) {
       this.userName = this.$store.state.session.employee.displayname;

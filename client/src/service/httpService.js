@@ -45,7 +45,9 @@ function pdfStreamRequest(url, method, param = {}) {
 export default class Api {
 
   constructor(url) {
-    this.server = process.env.NODE_ENV === 'production' ? '' : import.meta.env.SERVER_PATH;
+
+    const localServer = `http://localhost:${import.meta.env.VITE_APP_API_PORT}`;
+    this.server = process.env.NODE_ENV === 'production' ? '' : localServer;
     this.url = this.server + url;
     this.$http = axios;
     this.unwrapHttpResponse = unwrapHttpResponse;

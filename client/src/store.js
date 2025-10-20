@@ -1,11 +1,10 @@
 
 import { createStore } from 'vuex'
 import AppCache from "./service/appCache";
-const env = require('../.env.js');
 
 export default createStore({
   state: {
-    server: process.env.NODE_ENV === 'production' ? '/' : `http://localhost:${env.serverPort}/`,
+    server: process.env.NODE_ENV === 'production' ? '/' : import.meta.env.SERVER_PATH,
     session: AppCache.get('session'),
     enterprise : AppCache.get('enterprise'),
     order: {
