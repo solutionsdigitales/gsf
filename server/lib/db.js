@@ -1,6 +1,6 @@
 /* eslint class-methods-use-this:off */
 const q = require('q');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const uuidParse = require('uuid-parse');
 const _ = require('lodash');
 const debug = require('debug')('db');

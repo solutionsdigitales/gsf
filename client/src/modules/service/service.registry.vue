@@ -61,7 +61,7 @@
 <script>
 import serviceService from "./service.service";
 import userActions from "./actions";
-import CreateUpdateModal from "./createUpdateModal";
+import CreateUpdateModal from "./createUpdateModal.vue";
 import AppCache from "../../service/appCache";
 
 export default {

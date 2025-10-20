@@ -124,6 +124,7 @@
           v-on:input="validate()"
           :minFractionDigits="2"
           v-model="selectedTransaction.amount"
+          style="width: 100%;"
           :class="{
             'p-invalid': validationErrors.amount && submitted,
           }"

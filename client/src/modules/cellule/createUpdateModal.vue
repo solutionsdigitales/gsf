@@ -11,9 +11,9 @@
     :visible="display"
     footer="Footer"
   >
-  <form @submit.prevent="submit()" class="p-fluid">
-    
-      <div class="col-p12" style="margin-top: 25px">
+  <form @submit.prevent="submit()">
+    <div class="grid">
+      <div class="col-12" style="margin-top: 5px">
         <div class="p-flield">
           <label
             for="name"
@@ -32,7 +32,8 @@
           />
           
         </div>
-
+        </div>
+        <div class="col-12" style="margin-top: 5px">
         <div class="p-field">
             <label
               for="sevice"
@@ -53,7 +54,8 @@
             />
           </div>
 
-          
+          </div>
+          <div class="col-12" style="margin-top: 5px">
         
           <div class="p-field">
             <label for="creation_date"
@@ -63,7 +65,7 @@
             >
               {{ $t("FORM.LABELS.CREATED_AT") }}
             </label>
-
+          </div>
             <Calendar
               id="creation_date"
               v-model="selectedCellule.creation_date"
@@ -74,9 +76,11 @@
               placeholder="dd/mm/yyyy"
               dateFormat="dd/mm/yy"
             />
-          </div>
+          
+    
+          
       </div>
-      
+      </div>
     </form>
     <template #footer>
       <Button

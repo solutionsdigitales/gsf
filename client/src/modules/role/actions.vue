@@ -36,10 +36,10 @@
 
 <script>
 import { defineComponent } from "vue";
-import CreateUpdateModal from "./createUpdateModal";
+import CreateUpdateModal from "./createUpdateModal.vue";
 import RolePageModal from "./role.pages.vue";
 import RoleActionsModal from "./role.actions.vue";
-import ConfirmModal from "../../components/ConfirmModal";
+import ConfirmModal from "../../components/ConfirmModal.vue";
 import RoleService from "./role.service";
 
 export default defineComponent({

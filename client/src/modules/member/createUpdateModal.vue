@@ -12,7 +12,7 @@
   >
     <form @submit.prevent="submit()" class="p-fluid">
       <div class="grid">
-        <div class="col-12 lg:col-6 xl:col-6" style="margin-top: 15px">
+        <div class="col-12 lg:col-5 xl:col-5" style="margin-top: 15px">
 
         <div class="p-field">
           <label
@@ -103,7 +103,8 @@
         </div>
 
         </div>
-      <div class="col-12 lg:col-6 xl:col-6" style="margin-top: 15px">
+        <div class="col-12 lg:col-2 xl:col-2" style="margin-top: 15px"></div>
+      <div class="col-12 lg:col-5 xl:col-5" style="margin-top: 15px">
         <div class="p-field">
           <label for="address" class="label-required">
             {{ $t("FORM.LABELS.ADDRESS") }}

@@ -142,10 +142,10 @@
 
 <script>
 import MemberService from "./member.service";
-import { FilterMatchMode } from "primevue/api";
-import memberActions from "./actions";
+import { FilterMatchMode } from "@primevue/core/api";
+import memberActions from "./actions.vue";
 import bhFilters from "../../components/filters.vue";
-import CreateUpdateModal from "./createUpdateModal";
+import CreateUpdateModal from "./createUpdateModal.vue";
 import AppCache from "../../service/appCache";
 import UtilService from "../../service/util";
 import SearchModal from "./modal/searchModal.vue";

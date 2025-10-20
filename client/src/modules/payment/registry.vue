@@ -146,9 +146,9 @@
 </template>
 
 <script>
-import { FilterMatchMode } from "primevue/api";
+import { FilterMatchMode } from "@primevue/core/api";
 import transactionService from "./payment.service";
-import PaymentActions from "./actions";
+import PaymentActions from "./actions.vue";
 import bhFilters from "../../components/filters.vue";
 import SearchModal from "./modal/searchModal.vue";
 import CreateUpdateModal from "./new.vue";

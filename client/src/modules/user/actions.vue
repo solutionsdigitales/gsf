@@ -28,7 +28,7 @@
 
 <script>
 import { defineComponent } from "vue";
-import CreateUpdateModal from "./createUpdateModal";
+import CreateUpdateModal from "./createUpdateModal.vue";
 
 import ConfirmModal from "../../components/ConfirmModal.vue";
 import UserRoleModal from "../role/user.roles.vue";

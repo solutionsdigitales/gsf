@@ -8966,4 +8966,8 @@ input[type="checkbox"].switch_1{
   input[type="checkbox"].switch_1:checked:after{
 	left: calc(100% - 1.5em);
   }
-	
+
+.p-inputtext, .p-password-input, .p-select, .p-datepicker-input,.p-datepicker {
+  width: 100% !important;
+  height: 40px !important;
+}

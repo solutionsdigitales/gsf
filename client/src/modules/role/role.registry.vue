@@ -1,13 +1,6 @@
 <template>
   <div class="col-p12 card page-body">
-    <div style="float: right; width: 300px">
-      <span class="p-buttonset">
-        <Button style="float: right" v-on:click="Add()" :label="$t('FORM.BUTTONS.ADD')" icon="pi pi-plus" />
-      </span>
-    </div>
-    <br />
-    <br />
-    <br />
+  
 
     <DataTable
       @rowSelect="onRowSelect"
@@ -20,6 +13,11 @@
     >
       <template #header>
         {{ $t("TREE.ROLE") }}
+        <div class="flex justify-content-between flex-column sm:flex-row">
+          <span class="p-buttonset">
+        <Button style="float: right" v-on:click="Add()" :label="$t('FORM.BUTTONS.ADD')" icon="pi pi-plus" />
+      </span>
+        </div>
       </template>
       
       <template #empty>
@@ -55,8 +53,8 @@
 
 <script>
 import RoleService from "./role.service";
-import roleActions from "./actions";
-import CreateUpdateModal from "./createUpdateModal";
+import roleActions from "./actions.vue";
+import CreateUpdateModal from "./createUpdateModal.vue";
 import AppCache from "../../service/appCache";
 
 export default {

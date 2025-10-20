@@ -1,85 +1,47 @@
-
 <template>
-  <Dialog
-    v-if="display"
-    :header="$t('TREE.USER')"
-    :closable="false"
-    position="top"
-    :style="{ width: '30vw' }"
-    :modal="true"
-    :visible="display"
-    footer="Footer"
-  >
-    <form @submit.prevent="submit()" class="p-fluid">
-      <div class="col-p12" style="margin-top: 25px">
-        <div class="p-field">
-          <label
-            for="name"
-            :class="{ 'p-error': validationErrors.name && submitted }"
-          >
-            {{ $t("FORM.LABELS.NAME") }}*
-          </label>
+  <Dialog v-if="display" :header="$t('TREE.USER')" :closable="false" position="top" :style="{ width: '30vw' }"
+    :modal="true" :visible="display" footer="Footer">
+    <form @submit.prevent="submit()" style="width: 100%;">
+      <div class="grid">
+        <div class="col-12" style="margin-top: 25px">
+          <div class="p-field">
+            <label for="name" :class="{ 'p-error': validationErrors.name && submitted }">
+              {{ $t("FORM.LABELS.NAME") }}*
+            </label>
+          </div>
+          <InputText id="name" v-on:input="validate()" v-model="selectedUser.name" :class="{
+            'p-invalid': validationErrors.name && submitted,
+          }" />
 
-          <InputText
-            id="name"
-            v-on:input="validate()"
-            v-model="selectedUser.name"
-            :class="{
-              'p-invalid': validationErrors.name && submitted,
-            }"
-          />
         </div>
-      </div>
 
-      <div class="col-p12" style="margin-top: 25px" v-if="!selectedUser.id">
-        <div class="p-field">
-          <label
-            for="password"
-            :class="{
+
+
+        <div class="col-12" style="margin-top: 5px" v-if="!selectedUser.id">
+          <div class="p-field">
+            <label for="password" :class="{
               'p-error': validationErrors.password && submitted,
-            }"
-            >{{ $t("FORM.LABELS.PASSWORD") }}*</label
-          >
-        </div>
-        <Password
-          id="password"
-          v-model="selectedUser.pwd"
-          :feedback="false"
-          v-on:input="validate()"
-          :class="{
+            }">{{ $t("FORM.LABELS.PASSWORD") }}*</label>
+          </div>
+          <Password id="password" style="width: 100%;" v-model="selectedUser.pwd" :feedback="false" v-on:input="validate()" :class="{
             'p-invalid': validationErrors.password && submitted,
-          }"
-          toggleMask
-        >
-        </Password>
-      </div>
+          }" toggleMask>
+          </Password>
+        </div>
 
-      <br />
-      <div class="p-field-checkbox">
-        <Checkbox
-          id="locked"
-          :binary="true"
-          name="locked"
-          v-model="selectedUser.locked"
-        />
-        <label for="locked">
-          {{ $t("FORM.LABELS.LOCKED") }}
-        </label>
+        <br />
+        <div >
+          <Checkbox id="locked" :binary="true"  name="locked" v-model="selectedUser.locked" />
+          <label for="locked" style="width:20px; margin-top:10px">
+            {{ $t("FORM.LABELS.LOCKED") }}
+          </label>
+        </div>
       </div>
     </form>
     <template #footer>
-      <Button
-        id="cancel"
-        :label="$t('FORM.BUTTONS.CANCEL')"
-        @click="closeDialog"
-        class="p-button-text"
-      />
-      <Button
-        type="submit"
-        id="submitButton"
-        @click="submit"
-        :label="user.id ? $t('FORM.BUTTONS.UPDATE') : $t('FORM.BUTTONS.SAVE')"
-      />
+      <Button id="cancel" :label="$t('FORM.BUTTONS.CANCEL')" @click="closeDialog" class="p-button-text" />
+      <Button type="submit" id="submitButton" @click="submit"
+        :label="user.id ? $t('FORM.BUTTONS.UPDATE') : $t('FORM.BUTTONS.SAVE')" />
     </template>
   </Dialog>
 </template>

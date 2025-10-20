@@ -46,8 +46,8 @@
 
 <script>
 import ActivityService from "./acivity.service";
-import activityActtions from "./actions";
-import CreateUpdateModal from "./createUpdateModal";
+import activityActtions from "./actions.vue";
+import CreateUpdateModal from "./createUpdateModal.vue";
 import AppCache from "../../service/appCache";
 
 export default {

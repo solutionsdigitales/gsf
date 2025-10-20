@@ -1,11 +1,13 @@
-import 'primevue/resources/primevue.min.css';
-// import 'primeflex/primeflex.css';
-// import 'primeicons/primeicons.css';
-// import 'prismjs/themes/prism-coy.css';
+//import 'primevue/resources/primevue.min.css';
+import '../../client/css/style.css';
+import 'primeflex/primeflex.css';
+import 'primeicons/primeicons.css';
+import 'prismjs/themes/prism-coy.css';
 import './assets/styles/layout.scss';
 import './assets/demo/flags/flags.css';
 
-import Aura from '@primeuix/themes/material';
+// p-inputtext p-component
+import Aura from '@primeuix/themes/aura';
 import { createApp, reactive } from 'vue';
 import { createI18n } from 'vue-i18n'
 
@@ -36,7 +38,6 @@ import ConfirmationService from 'primevue/confirmationservice';
 import ContextMenu from 'primevue/contextmenu';
 import DataTable from 'primevue/datatable';
 import DataView from 'primevue/dataview';
-import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions';
 import Dialog from 'primevue/dialog';
 import Divider from 'primevue/divider';
 import Dropdown from 'primevue/dropdown';
@@ -95,7 +96,6 @@ import Tooltip from 'primevue/tooltip';
 import ToggleButton from 'primevue/togglebutton';
 import Tree from 'primevue/tree';
 import TreeTable from 'primevue/treetable';
-import TriStateCheckbox from 'primevue/tristatecheckbox';
 
 import CodeHighlight from './AppCodeHighlight';
 //import Help from './components/help';
@@ -172,7 +172,6 @@ app.component('ConfirmPopup', ConfirmPopup);
 app.component('ContextMenu', ContextMenu);
 app.component('DataTable', DataTable);
 app.component('DataView', DataView);
-app.component('DataViewLayoutOptions', DataViewLayoutOptions);
 app.component('Dialog', Dialog);
 app.component('Divider', Divider);
 app.component('Dropdown', Dropdown);
@@ -227,7 +226,6 @@ app.component('Toolbar', Toolbar);
 app.component('ToggleButton', ToggleButton);
 app.component('Tree', Tree);
 app.component('TreeTable', TreeTable);
-app.component('TriStateCheckbox', TriStateCheckbox);
 // app.component('Help', Help);
 
 app.mount('#app');

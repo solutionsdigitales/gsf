@@ -96,11 +96,11 @@
 
 <script>
 import accountService from "./account.service";
-import accountActtions from "./actions";
-import CreateUpdateModal from "./createUpdateModal";
+import accountActtions from "./actions.vue";
+import CreateUpdateModal from "./createUpdateModal.vue";
 import AppCache from "../../service/appCache";
 import ImportModal from "./importModal.vue";
-import { FilterMatchMode } from "primevue/api";
+import { FilterMatchMode } from "@primevue/core/api";
 
 export default {
   data() {

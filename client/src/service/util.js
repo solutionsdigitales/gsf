@@ -1,5 +1,5 @@
 import moment from 'moment'
-const _ = require('lodash');
+import _ from 'lodash';
 
 function UtilService() {
   const service = {};

@@ -24,7 +24,7 @@
 
 <script>
 import { defineComponent } from "vue";
-import CreateUpdateModal from "./createUpdateModal";
+import CreateUpdateModal from "./createUpdateModal.vue";
 import Notifyproject from "../../service/Notify.service";
 import ConfirmModal from "../../components/ConfirmModal.vue";
 

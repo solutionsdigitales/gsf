@@ -55,8 +55,8 @@
 
 <script>
 import projectService from "./project.service";
-import divitionActions from "./actions";
-import CreateUpdateModal from "./createUpdateModal";
+import divitionActions from "./actions.vue";
+import CreateUpdateModal from "./createUpdateModal.vue";
 import AppCache from "../../service/appCache";
 
 export default {

@@ -42,6 +42,7 @@
 
           <InputNumber
               id="amount"
+            style="width: 100%;"
               v-on:input="validate()"
               :minFractionDigits="2"
               v-model="selectedPricing.amount"
@@ -52,7 +53,9 @@
         </div>
 
          <br />
-      <div class="p-field-checkbox">
+         <div class="flex flex-wrap justify-center gap-4">
+         
+     <div class="flex items-center gap-2">
         <Checkbox
           id="is_periodic"
           :binary="true"
@@ -65,7 +68,7 @@
       </div>
 
          <br />
-      <div class="p-field-checkbox">
+      <div class="flex items-center gap-2">
         <Checkbox
           id="is_debt"
           :binary="true"
@@ -78,8 +81,7 @@
       </div>
 
 
-         <br />
-      <div class="p-field-checkbox">
+        
         <Checkbox
           id="is_refund"
           :binary="true"

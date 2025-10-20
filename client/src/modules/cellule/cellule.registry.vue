@@ -1,20 +1,6 @@
 <template>
   <div class="col-p12 card page-body">
-    <div style="float: right; width: 300px">
-      <span class="p-buttonset">
-        <Button
-          id="addButton"
-          v-on:click="Add()"
-          :label="$t('FORM.BUTTONS.ADD')"
-          icon="pi pi-plus"
-          style="float: right"
-        />
-      </span>
-    </div>
-    <br />
-    <br />
-    <br />
-
+   
     <DataTable
       @rowSelect="onRowSelect"
       :value="cellules"
@@ -27,6 +13,15 @@
     >
       <template #header>
         {{ $t("TREE.CELLULE") }}
+        <div class="flex justify-content-between flex-column sm:flex-row">
+           <Button
+          id="addButton"
+          v-on:click="Add()"
+          :label="$t('FORM.BUTTONS.ADD')"
+          icon="pi pi-plus"
+          style="float: right"
+        />
+        </div>
       </template>
 
       <template #empty>
@@ -62,8 +57,8 @@
 
 <script>
 import celluleService from "./cellule.service";
-import celluleActions from "./actions";
-import CreateUpdateModal from "./createUpdateModal";
+import celluleActions from "./actions.vue";
+import CreateUpdateModal from "./createUpdateModal.vue";
 import AppCache from "../../service/appCache";
 
 export default {

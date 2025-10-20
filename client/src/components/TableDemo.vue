@@ -271,7 +271,7 @@
 </template>
 
 <script>
-	import {FilterMatchMode,FilterOperator} from 'primevue/api';
+	import {FilterMatchMode,FilterOperator} from '@primevue/core/api';
 	import CustomerService from "../service/CustomerService";
 	import ProductService from '../service/ProductService';
 	export default {

@@ -97,10 +97,10 @@
 <script>
 import VendorService from "./vendor.service";
 import vendorActtions from "./actions";
-import CreateUpdateModal from "./createUpdateModal";
+import CreateUpdateModal from "./createUpdateModal.vue";
 import AppCache from "../../service/appCache";
 import ImportModal from "./importModal.vue";
-import { FilterMatchMode } from "primevue/api";
+import { FilterMatchMode } from "@primevue/core/api";
 
 export default {
   data() {

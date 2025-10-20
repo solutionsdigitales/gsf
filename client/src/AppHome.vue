@@ -1,5 +1,5 @@
 <template>
-  <div :class="containerClass" @click="onWrapperClick" id="appMainBody">
+  <div :class="containerClass" @click="onWrapperClick" id="appMainBody" style="background-color: #fff !important;">
     <AppTopBar
       @menu-toggle="onMenuToggle"
       @language-changed="onLanguageChange()"

@@ -1,18 +1,6 @@
 <template>
   <div class="col-p12 card page-body">
-    <div style="float: right; width: 300px">
-      <span class="p-buttonset">
-        <Button
-          id="addButton"
-          style="float: right" 
-          v-on:click="Add()" 
-          :label="$t('FORM.BUTTONS.ADD')" icon="pi pi-plus" />
-      </span>
-    </div>
-    <br />
-    <br />
-    <br />
-
+    
     <DataTable
       @rowSelect="onRowSelect"
       :value="users"
@@ -26,6 +14,17 @@
     >
       <template #header>
         {{ $t("TREE.USER") }}
+        <div class="flex justify-content-between flex-column sm:flex-row">
+          <span>
+             <InputGroup>
+            <Button
+          id="addButton"
+          v-on:click="Add()" 
+          :label="$t('FORM.BUTTONS.ADD')" icon="pi pi-plus" />
+          </InputGroup>
+          </span>
+
+        </div>
       </template>
       <Column selectionMode="single" headerStyle="width: 3em"></Column>
 
@@ -72,10 +71,10 @@
 </template>
 
 <script>
-import { FilterMatchMode } from "primevue/api";
+import { FilterMatchMode } from "@primevue/core/api";
 import userverService from "./user.service";
-import userActions from "./actions";
-import CreateUpdateModal from "./createUpdateModal";
+import userActions from "./actions.vue";
+import CreateUpdateModal from "./createUpdateModal.vue";
 import AppCache from "../../service/appCache";
 
 export default {
