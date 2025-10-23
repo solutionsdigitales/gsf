@@ -198,6 +198,12 @@
 			"VIEW_CLOSING_BALANCE": "View Closing Balance"
 		},
 		"LABELS": {
+			"FREQUENCIES":{
+				"DAYLY":"Dayly",
+				"WEEKLY":"Weekly",
+				"MONTHLY":"Monthly",
+				"YEARLY":"Yearly"
+			},
 			"ABBREVIATION": "Abbreviation",
 			"ACCOUNT": "Account",
 			"ACCOUNT_EXTRACT": "Account Details",
@@ -210,6 +216,7 @@
 			"OWNER": "Owner",
 			"AIR": "Air transport",
 			"ROAD": "Road transport",
+			"FREQUENCY":"Frequency",
 			"ADD": "Add",
 			"ADD_MORE": "Add more",
 			"ADDITION": "Addition",
@@ -976,6 +983,7 @@
 	},
 	"TREE": {
 		"ACCOUNT": "Account",
+		"INVOICE":"Invoice",
 		"ACTIVITY": "activity",
 		"EMPLOYEE": "Employee",
 		"COUNTRY": "Country",

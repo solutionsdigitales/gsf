@@ -1,0 +1,297 @@
+<template>
+  <Dialog v-if="display" :header="$t('TREE.INVOICE')" :closable="false" position="top" :style="{ width: '40vw' }"
+    :modal="true" :visible="display" footer="Footer">
+    <form @submit.prevent="submit()" class="p-fluid">
+      <div class="p-field">
+        <label for="member" class="label-required" :class="{ 'p-error': validationErrors.member_uuid && submitted }">
+          {{ $t("TREE.MEMBERS") }}
+        </label>
+        <Dropdown id="member" v-model="selectedMember" @change="setMember()" :options="members" :filter="true"
+          optionLabel="fullname" :class="{
+            'p-invalid': validationErrors.member_uuid && submitted,
+          }" />
+      </div>
+
+      <div class="p-field">
+        <label for="pricing" class="label-required" :class="{ 'p-error': validationErrors.pricing_uuid && submitted }">
+          {{ $t("FORM.LABELS.FREQUENCY") }}
+        </label>
+        <Dropdown 
+          id="frequency" 
+          v-model="selectedFrequency" @change="setFrequency()" 
+          :options="frequencyList" optionLabel="label"
+          :class="{
+            'p-invalid': validationErrors.frequency && submitted,
+          }" />
+      </div>
+
+      <div class="p-field">
+        <label for="currency_id" class="label-required"
+          :class="{ 'p-error': validationErrors.currency_id && submitted }">
+          {{ $t("TABLE.COLUMNS.CURRENCY") }}
+        </label>
+        <Dropdown id="currency_id" v-model="selectedCurrency" @change="setCurrency()" :options="currencies"
+          optionLabel="name" :class="{
+            'p-invalid': validationErrors.currency_id && submitted,
+          }" />
+      </div>
+
+      <div class="p-field" v-if="selectedPrice.is_periodic">
+        <label for="year" class="label-required" :class="{ 'p-error': validationErrors.year && submitted }">
+          {{ $t("FORM.LABELS.YEAR") }}
+        </label>
+        <Dropdown id="year" v-model="selectedYear" @change="setYear()" :options="years" :filter="true"
+          optionLabel="id" />
+      </div>
+
+      <div class="p-field" v-if="selectedPrice.is_periodic">
+        <label for="month" class="label-required" :class="{ 'p-error': validationErrors.month && submitted }">
+          {{ $t("FORM.LABELS.MONTH") }}
+        </label>
+        <MultiSelect id="month" v-model="selectedMonths" @change="setMonth()" :options="months" :filter="true"
+          optionLabel="label" display="chip" />
+      </div>
+
+
+
+      <div class="p-field">
+        <label for="amount" :class="{ 'p-error': validationErrors.amount && submitted }">
+          {{ $t("FORM.LABELS.AMOUNT") }}
+        </label>
+
+        <InputNumber id="amount" v-on:input="validate()" :minFractionDigits="2" v-model="selectedInvoice.amount"
+          style="width: 100%;" :class="{
+            'p-invalid': validationErrors.amount && submitted,
+          }" />
+      </div>
+
+      <div class="p-field">
+        <label for="date" :class="{
+          'p-error': validationErrors.date && submitted,
+        }">
+          {{ $t("VOUCHERS.PAYEMENT_DATE") }}
+        </label>
+
+        <Calendar id="date" v-model="selectedInvoice.date" :showButtonBar="true" :maxDate="new Date()"
+          @date-select="validate()" :showIcon="true" placeholder="dd/mm/yyyy" dateFormat="dd/mm/yy" />
+      </div>
+    </form>
+    <template #footer>
+      <Button id="cancelButton" :label="$t('FORM.BUTTONS.CANCEL')" @click="closeDialog" class="p-button-text" />
+      <Button id="submitButton" type="submit" @click="submit" :label="selectedInvoice.uuid
+          ? $t('FORM.BUTTONS.UPDATE')
+          : $t('FORM.BUTTONS.SAVE')
+        " />
+    </template>
+  </Dialog>
+</template>
+
+<script>
+import { defineComponent } from "vue";
+
+import InvoiceService from "./invoice.service";
+import NotifyService from "../../service/Notify.service";
+import CurrencyService from "../../service/currencyService";
+import MemberService from "../member/member.service";
+import RateService from "./rate.service";
+import util from "../../service/util";
+import constants from "../../service/constant";
+
+export default defineComponent({
+  number: "CreateUpdateModal",
+  props: {
+    transaction: Object,
+    close: Function,
+    display: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      items: [],
+      frequencyList: [
+        {
+          id: 'dayly',
+          label: "Journalier",
+        }, {
+          id: 'weekly',
+          label: "Hebdomadaire"
+        },
+        {
+          id: 'monthly',
+          label: "Monsuel"
+        },
+        {
+          id: 'yearly',
+          label: "Annuel",
+        }
+      ],
+      members: [],
+      currencies: [],
+      selectedInvoice: {},
+      selectedCurrency: {},
+      validationErrors: {},
+      selectedMember: {},
+      selectedPrice: {},
+      submitted: false,
+      loading: false,
+      months: [],
+      selectedMonths: [],
+      selectedYear: {},
+      years: [
+        {
+          id: 2022,
+        },
+        { id: 2023 },
+      ],
+    };
+  },
+  created() {
+    this.months = [];
+    this.validationErrors = {};
+    constants.MONTHS.forEach((m) => {
+      this.months.push({
+        id: m,
+        label: this.$t(`TABLE.COLUMNS.DATE_MONTH.${m}`),
+      });
+    });
+  },
+  watch: {
+    display(newVal) {
+      if (newVal) {
+        this.find();
+      }
+    },
+  },
+  methods: {
+    closeDialog() {
+      this.submitted = false;
+      this.selectedInvoice = {};
+      this.close(false);
+    },
+    setFrequency() {
+      this.selectedInvoice.frequency = this.selectedFrequency.id;
+      this.setAmount();
+      this.validate();
+    },
+    setMember() {
+      this.selectedInvoice.member_uuid = this.selectedMember.uuid;
+      this.validate();
+    },
+    setMonth() {
+      this.selectedInvoice.months = this.selectedMonths.map(m => m.id);
+      this.setAmount();
+    },
+    setYear() {
+      this.selectedInvoice.year = this.selectedYear.id;
+      this.setAmount();
+    },
+    setCurrency() {
+      this.selectedInvoice.currency_id = this.selectedCurrency.id;
+      this.setAmount();
+      this.validate();
+    },
+    async setAmount() {
+      if (
+        this.selectedInvoice.currency_id &&
+        this.selectedInvoice.pricing_uuid
+      ) {
+        const rates = await RateService.read(null, {
+          currency_id: this.selectedInvoice.currency_id,
+          limit: 1,
+        });
+        const rate = (rates[0] || {}).buy_rate || 1;
+        this.selectedInvoice.amount = this.selectedPrice.amount * rate;
+        if (this.selectedPrice.is_periodic) {
+          this.selectedInvoice.amount *= this.selectedMonths.length;
+        }
+      }
+    },
+    submit() {
+      if (this.loading) return;
+      this.submitted = true;
+      const isValid = this.validate();
+      if (!isValid) {
+        NotifyService.danger(this, "", "FORM.ERRORS.INVALID");
+        return;
+      }
+      this.loading = true;
+  
+      this.selectedInvoice.created_by = this.$store.state.session.user.id;
+      const operation = this.transaction.uuid
+        ? InvoiceService.update(this.transaction.uuid, this.selectedInvoice)
+        : InvoiceService.create(this.selectedInvoice);
+
+      operation
+        .then(() => {
+          NotifyService.success(this, "", null);
+          this.selectedInvoice = {};
+          this.close(true);
+        })
+        .catch(() => {
+          NotifyService.danger(this, "", null);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+    async find() {
+      console.log(this.$store.state.session.user);
+      this.selectedMember = {};
+      this.selectedCurrency = {};
+      this.selectedPrice = {};
+      this.currencies = await CurrencyService.read();
+      const _members = await MemberService.read();
+      this.members = _members.map((m) => {
+        m.fullname =
+          m.number +
+          " - " +
+          m.lastname +
+          " " +
+          (m.middlename || "") +
+          " " +
+          m.firstname;
+        return m;
+      });
+      this.currencies = this.$store.state.currencies;
+
+      if (!this.transaction.uuid) return;
+      InvoiceService.read(this.transaction.uuid).then((transaction) => {
+        if (transaction.activation_date) {
+          transaction.activation_date = new Date(transaction.activation_date);
+        }
+        this.selectedInvoice = transaction;
+      });
+    },
+    validate() {
+      if (!this.submitted) return;
+      const fields = [
+        'currency_id',
+        'member_uuid',
+        'frequency',
+        'amount',
+        'date',
+      ];
+      if (this.selectedPrice.is_periodic) {
+        fields.push('months', 'year');
+      }
+      fields.forEach((field) => {
+        if (this.selectedInvoice[field]) {
+          delete this.validationErrors[field];
+        } else {
+          this.validationErrors[field] = true;
+        }
+      });
+
+      return Object.keys(this.validationErrors).length === 0;
+    },
+  },
+});
+</script>
+
+<style scoped>
+.p-field {
+  padding-top: 20px;
+}
+</style>

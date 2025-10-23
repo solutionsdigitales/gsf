@@ -2,11 +2,11 @@
 const db = require('../../lib/db');
 const _ = require('lodash');
 const FilterParser = require('../../lib/filter');
-
+const util =  require('../../lib/util');
 
 // database connection
 const uuidToConvert = [
-  'uuid', 'member_uuid', 'user_id',
+  'uuid', 'member_uuid', 'user_id', 'invoice_uuid',
   'pricing_uuid', 'pricing', 'membre_cellule'
 ];
 
@@ -72,7 +72,7 @@ async function createProcess(data) {
   } else {
   data.uuid = db.bid(data.uuid ? data.uuid : db.uuidString());
   data.number = await getMaxNumber();
-  
+  data.date = util.formatDate(data.date, 'YYYY-MM-DD');
   return db.exec(sql, data);
   }
 }
@@ -113,9 +113,11 @@ function lookUp(options) {
         FORMAT_DATE(t.date) as 'date', FORMAT_DATETIME(t.last_update) AS 'last_update',
         BUID(m.uuid) AS 'member_uuid', m.lastname as member_lastname,
         m.middlename as member_middlename, m.firstname as member_firstname, m.number as member_number,
-        u.name as 'user_name'
+        u.name as 'user_name',
+        FORMAT_ENTITY_NUMBER(iv.number) as invoice_number
     FROM transactions t
     LEFT JOIN  member m ON m.uuid = t.member_uuid
+    LEFT JOIN  invoice iv ON iv.uuid = t.invoice_uuid
     LEFT JOIN  user u ON u.id = t.user_id
   `;
 

@@ -100,10 +100,11 @@ export default {
       this.cellule = {};
     },
     closeDialog(result) {
+      this.displayCreateModal = false;
       if (result) {
         this.getCellules();
       }
-      this.displayCreateModal = false;
+      
     },
 
     toggleAction(event) {

@@ -57,6 +57,11 @@ const routes = [
         name: 'payments',
         component: () => import('./modules/payment/registry.vue'),
       },
+      {
+        path: '/invoice',
+        name: 'invoice',
+        component: () => import('./modules/invoice/registry.vue'),
+      },
     ]
   },
   {

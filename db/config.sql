@@ -1,12 +1,8 @@
 INSERT INTO `modules` (`id`, `label`, `description`, `icon`) VALUES
 (1, 'TREE.DASHBOARD', 'Dashboard', 'pi pi-fw pi-home'),
 (2, 'TREE.SETTING', 'Setting', 'pi pi-cogs'),
-(3, 'TREE.PRF', 'PRF', 'pi pi-file'),
-(4, 'TREE.REPORT', 'Report', 'pi pi-pie-chart'),
-(5, 'TREE.FR', 'FR', 'pi pi-file'),
-(6, 'TREE.EXPENSE_REPORT', 'Expense report', 'pi pi-file'),
-(7, 'TREE.OCH', 'OCH', 'pi pi-file'),
-(8, 'TREE.TRAVAL_ADVANCE', 'TA', 'pi pi-file');
+(3, 'TREE.FINANCE', 'FINANCE', 'pi pi-file'),
+
 
 
 INSERT INTO `page` (`code`, `label`, `url`, `isTreeItem`, `module_id`)  VALUES
@@ -15,8 +11,9 @@ INSERT INTO `page` (`code`, `label`, `url`, `isTreeItem`, `module_id`)  VALUES
 ('conf.002', 'TREE.ROLE', 'roles', 1, 2),
 ('conf.0021', 'TREE.CELLULE', 'cellules', 1, 2),
 ('conf.003', 'TREE.MEMBERS', 'members', 1, 2),
-('conf.004', 'TREE.PAYMENT', 'payments', 1, 2),
-('dash.001', 'TREE.DASHBOARD', 'dashboard', 1, 1);
+('dash.001', 'TREE.DASHBOARD', 'dashboard', 1, 1),
+('fin1.001', 'TREE.INVOICE', 'invoice', 1, 3),
+('fin2.001', 'TREE.PAYMENT', 'payments', 1, 3);
 
 
 INSERT INTO`actions` (`id`,`description`) VALUES

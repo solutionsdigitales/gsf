@@ -196,6 +196,12 @@
 			"VIEW_CLOSING_BALANCE": "Aperçue de la balance de cloture"
 		},
 		"LABELS": {
+			"FREQUENCIES":{
+				"DAYLY":"Journalier",
+				"WEEKLY":"Hebdomadaire",
+				"MONTHLY":"Monsuel",
+				"YEARLY":"Annuel"
+			},
 			"ABBREVIATION": "Abbréviation",
 			"ACCOUNT": "Compte",
 			"ACCOUNT_EXTRACT": "Extrait de compte",
@@ -208,6 +214,7 @@
 			"ACTIVE": "Actif",
 			"CAR": "Voiture",
 			"PLAN" : "Avion",
+			"FREQUENCY":"Fréquence",
 			"AIR": "Transport aérien",
 			"ROAD" : "Transport routier",
 			"INACTIVE": "Inactif",
@@ -982,6 +989,7 @@
 	},
 	"TREE": {
 		"ACCOUNT": "Compte",
+		"INVOICE":"Facture",
 		"ACTIVITY": "Activité",
 		"EMPLOYEE": "Employée",
 		"LOCATION": "Localisation",

@@ -1,7 +1,8 @@
 const db = require('../../lib/db');
 const FilterParser = require('../../lib/filter');
 const util =  require('../../lib/util');
-const uuidToConvert = ['uuid'];
+
+const uuidToConvert = ['uuid','member_uuid'];
 
 function read(req, res, next) {
   const options = req.query;
@@ -12,27 +13,42 @@ function read(req, res, next) {
 }
 
 async function getMaxNumber() {
-  const sql = 'SELECT MAX(number) as max_number FROM cellule';
+  const sql = 'SELECT MAX(number) as max_number FROM invoice';
   const result = await db.one(sql);
   return (result.max_number || 0) + 1
 }
 
 function lookUp(options) {
   db.convert(options, uuidToConvert);
-  const filters = new FilterParser(options, { tableAlias: 'c' });
+  const filters = new FilterParser(options, { tableAlias: 'iv' });
   let sql = `
     SELECT 
-        BUID(c.uuid) as uuid, c.name,
-        FORMAT_ENTITY_NUMBER(c.number) as number,
-        FORMAT_DATE(c.creation_date) as creation_date,
-        c.town_id, c.created_at
-    FROM cellule c
+        BUID(iv.uuid) as uuid,
+        BUID(iv.member_uuid) as member_uuid,
+        FORMAT_ENTITY_NUMBER(iv.number) as number,
+        FORMAT_DATE(iv.date) as date,
+        iv.amount,
+        iv.currency_id,
+        c.symbol as currency_symbol,
+        iv.frequency,
+        iv.created_at,
+        BUID(iv.created_by) as created_by,
+        m.lastname as member_lastname,
+        m.firstname as member_firstname,
+        m.phone as member_phone,
+        FORMAT_ENTITY_NUMBER(m.number) as member_number,
+        u.name as user_name
+
+    FROM invoice iv
+    JOIN member m ON m.uuid =iv.member_uuid
+    JOIN currency c ON c.id = iv.currency_id
+    JOIN user u ON u.id = iv.created_by
   `;
 
   filters.equals('uuid');
   filters.equals('number');
-  filters.equals('name');
-  filters.setOrder(' ORDER BY c.number ');
+  filters.equals('member_uuid');
+  filters.setOrder(' ORDER BY iv.number ');
   return {
     sql: filters.applyQuery(sql),
     params: filters.parameters(),
@@ -44,11 +60,17 @@ function lookUp(options) {
 function detail(req, res, next) {
   const sql = `
     SELECT 
-        BUID(c.uuid) as uuid, c.name,
-        c.number, FORMAT_DATE(c.creation_date) as creation_date,
-        c.town_id, c.created_at
-    FROM cellule c
-    WHERE c.uuid = ?
+        BUID(iv.uuid) as uuid,
+        BUID(iv.member_uuid) as member_uuid,
+        FORMAT_ENTITY_NUMBER(iv.number) as number,
+        iv.amount,
+        iv.currency_id,
+        iv.frequency,
+        FORMAT_DATE(iv.date) as date,
+        iv.created_at,
+        BUID(iv.created_by) as created_by
+    FROM invoice iv
+    WHERE uuid=?
   `;
   const uuid = db.bid(req.params.uuid);
   db.one(sql, uuid).then(cellule => {
@@ -60,11 +82,11 @@ function detail(req, res, next) {
 async function create(req, res, next) {
   try {
     const data = req.body;
-    db.convert(data, ['uuid']);
+    db.convert(data, ['uuid', 'created_by', 'member_uuid']);
     data.uuid = db.bid(data.uuid ? data.uuid : db.uuidString());
-    data.creation_date = util.formatDate(data.creation_date, 'YYYY-MM-DD');
+    data.date = util.formatDate(data.date, 'YYYY-MM-DD');
     data.number = await getMaxNumber();
-    await db.exec('INSERT INTO cellule SET ?', data);
+    await db.exec('INSERT INTO invoice SET ?', data);
     res.sendStatus(201);
   } catch (error) {
     next(error);
@@ -83,7 +105,7 @@ function update(req, res, next) {
     data.creation_date = util.formatDate(data.creation_date, 'YYYY-MM-DD');
   }
   
-  db.exec('UPDATE cellule SET ? WHERE uuid=?', [data, uuid]).then(() => {
+  db.exec('UPDATE invoice SET ? WHERE uuid=?', [data, uuid]).then(() => {
     res.sendStatus(200);
   }).catch(next);
 }
@@ -91,7 +113,7 @@ function update(req, res, next) {
 // delete a project
 function remove(req, res, next) {
   const uuid = db.bid(req.params.uuid);
-  db.exec('DELETE FROM cellule  WHERE uuid=?', uuid).then(() => {
+  db.exec('DELETE FROM invoice  WHERE uuid=?', uuid).then(() => {
     res.sendStatus(200);
   }).catch(next);
 }

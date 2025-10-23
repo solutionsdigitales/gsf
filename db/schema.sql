@@ -229,6 +229,19 @@ CREATE TABLE `member`(
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 
+CREATE TABLE `invoice`(
+  `uuid` BINARY(16) NOT NULL,
+  `member_uuid` BINARY(16) NOT NULL,
+  `amount` VARCHAR(100) NOT NULL,
+  `currency_id` tinyint(3) unsigned NOT NULL,
+  `frequency` VARCHAR(100) NOT NULL,
+  `date` DATETIME NOT NULL,
+  `created_by` BINARY(16) NOT NULL COMMENT 'user_id',
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_update` DATETIME NULL,
+  PRIMARY KEY (`uuid`)
+)ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
 CREATE TABLE `pricing`(
   `uuid` BINARY(16) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
@@ -248,6 +261,7 @@ CREATE TABLE `transactions`(
   `number` INT NOT NULL,
   `member_uuid` BINARY(16) NOT NULL,
   `pricing_uuid` BINARY(16) NULL,
+  `invoice_uuid` BINARY(16) NULL,
   `date` DATE NOT NULL,
   `transaction_type` VARCHAR(50) NOT NULL,
   `month` VARCHAR(30) NULL,

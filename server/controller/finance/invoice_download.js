@@ -1,12 +1,12 @@
 const ExcelJS = require('exceljs');
-const transactions = require('./transactions');
+const invoices = require('./invoice');
 const db = require('../../lib/db');
 const util = require('../../lib/util');
 const i18n = require('../../lib/template/helpers/translate');
 
 async function exportToExcel(req, res, next) {
     const options = req.query;
-    const rqt = transactions.lookUp(options);
+    const rqt = invoices.lookUp(options);
     const rows = await db.exec(rqt.sql, rqt.params);
     const workbook = new ExcelJS.Workbook();
     const ws = workbook.addWorksheet('Sheet1');
@@ -32,10 +32,7 @@ async function exportToExcel(req, res, next) {
             { name: t('TREE.MEMBERS') , filterButton: true },
             { name: t('FORM.LABELS.AMOUNT'), filterButton: true, totalsRowFunction: 'sum'},
             { name: t('FORM.LABELS.CURRENCY'), filterButton: true },
-            { name: t('FORM.LABELS.INVOICE'), filterButton: true },
-            { name: t('FORM.LABELS.PAYMENT_METHOD') , filterButton: true  },
-            { name: t('FORM.LABELS.TRANSACTION_TYPE') , filterButton: true },
-            { name: t('FORM.LABELS.PERIOD') , filterButton: true },
+            { name: t('FORM.LABELS.FREQUENCY'), filterButton: true },
             { name: t('TABLE.COLUMNS.REGISTERED_BY'), filterButton: true },
             { name: t('FORM.LABELS.CANCELED'), filterButton: true },
             
@@ -55,11 +52,8 @@ async function exportToExcel(req, res, next) {
                 row.created_at,
                 row.member_fullname,
                 row.amount,
-                row.currency,
-                row.invoice_number,
-                row.payment_method,
-                row.transaction_type,
-                row.period,
+                row.currency_symbol,
+                row.frequency,
                 row.user_name,
                 row.canceled,
             ];
@@ -78,7 +72,7 @@ async function exportToExcel(req, res, next) {
 
     res.setHeader(
         'Content-Disposition',
-        `attachment; filename=transactions-${util.formatDate(new Date())}.xlsx`
+        `attachment; filename=invoices-${util.formatDate(new Date())}.xlsx`
     );
 
     return workbook.xlsx.write(res).then(() => {

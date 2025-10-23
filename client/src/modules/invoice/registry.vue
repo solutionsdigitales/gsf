@@ -98,25 +98,18 @@
         <Column field="amount" :header="$t('FORM.LABELS.AMOUNT')">
           <template #body="e">
             <div class="text-right w100">
-              {{ e.data.amount }} {{ e.data.currency }}
+              {{ e.data.amount }} {{ e.data.currency_symbol }}
             </div>
           </template>
         </Column>
-        
         <Column
-          field="invoice_number"
-          :header="$t('FORM.LABELS.INVOICE')"
-          class="text-right"
-        ></Column>
-        <Column
-          field="payment_method"
-          :header="$t('FORM.LABELS.PAYMENT_METHOD')"
-        ></Column>
-        <Column
-          field="transaction_type"
-          :header="$t('FORM.LABELS.TRANSACTION_TYPE')"
-        ></Column>
-        <Column field="period" :header="$t('FORM.LABELS.PERIOD')"></Column>
+          field="frequency"
+          :header="$t('FORM.LABELS.FREQUENCY')"
+        >
+        <template #body="e">
+          {{ $t("FORM.LABELS.FREQUENCIES." + (e.data.frequency|| '').toUpperCase()) }}
+        </template>
+        </Column>
         <Column
           field="user_name"
           :header="$t('TABLE.COLUMNS.REGISTERED_BY')"
@@ -124,7 +117,7 @@
 
         <Column field="action" header="Action" style="width: 100px">
           <template #body="e">
-            <PaymentActions
+            <InvoiceActions
               :entity="e.data"
               :actionId="e.data.code"
               v-on:reloadtransactionList="getTransaction()"
@@ -153,14 +146,14 @@
 
 <script>
 import { FilterMatchMode } from "@primevue/core/api";
-import transactionService from "./payment.service";
-import PaymentActions from "./actions.vue";
+import transactionService from "./invoice.service";
+import InvoiceActions from "./actions.vue";
 import bhFilters from "../../components/filters.vue";
 import SearchModal from "./modal/searchModal.vue";
 import CreateUpdateModal from "./new.vue";
 import AppCache from "../../service/appCache";
 import UtilService from "../../service/util";
-import PaymentService from "./payment.service";
+import PaymentService from "./invoice.service";
 
 export default {
   data() {
@@ -171,7 +164,7 @@ export default {
       items: [],
       loading: false,
       displaySearchModal: false,
-      server: "",
+      server: '',
       lang: "",
       selectedTransaction: null,
       displayCreateModal: false,
@@ -179,8 +172,7 @@ export default {
       filters: [],
       filter2: {
         member_fullname: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      },
-    };
+      }}
   },
   created() {
     const cache = AppCache.get("session") || {};
@@ -259,7 +251,7 @@ export default {
       this.Transaction = {};
     },
     downloadExcel() {
-      const uri = `${this.server}transactions/download/excel?lang=${this.lang}`;
+      const uri = `${this.server}invoices/download/excel?lang=${this.lang}`;
       UtilService.downloadURI(uri);
     },
     onenSearchModal() {
@@ -291,7 +283,7 @@ export default {
     },
   },
   components: {
-    PaymentActions,
+    InvoiceActions,
     CreateUpdateModal,
     bhFilters,
     SearchModal,

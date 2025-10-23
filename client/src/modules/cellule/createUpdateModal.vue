@@ -4,7 +4,6 @@
   <Dialog
     v-if="display"
     :header="$t('TREE.CELLULE')"
-    :closable="false"
     position="top"
     :style="{ width: '30vw' }"
     :modal="true"
@@ -111,7 +110,10 @@ export default defineComponent({
   number: "CreateUpdateModal",
   props: {
     cellule: Object,
-    close: Function,
+    close: {
+      type: Function,
+      default: ()=> {},
+    },
     display: {
       type: Boolean,
       default: false,
@@ -125,6 +127,7 @@ export default defineComponent({
       selectedTown: {},
       validationErrors: {},
       submitted: false,
+      loading: false
     };
   },
   watch: {
@@ -159,7 +162,7 @@ export default defineComponent({
       }
       this.loading = true;
       const formated = this.selectedCellule;
-      formated.creation_date = util.formatDate(formated.creation_date, 'YYYY-MM-DD');
+      // formated.creation_date = util.formatDate(formated.creation_date, 'YYYY-MM-DD');
       const operation = this.cellule.uuid
         ? celluleService.update(this.cellule.uuid, formated)
         : celluleService.create(formated);
@@ -170,7 +173,8 @@ export default defineComponent({
           this.selectedCellule = {};
           this.close(true);
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(e);
            NotifyService.danger(this, "", null);
         }).finally(() => {
           this.loading = false;

@@ -1,5 +1,6 @@
 
 const setting = require('./controller/setting');
+const finance = require('./controller/finance');
 
 class Routes {
 
@@ -74,13 +75,20 @@ class Routes {
     app.get('/members/download/excel', setting.memberDownload.exportToExcel);
     app.get('/members/counting/number', setting.member.count);
 
+    app.post('/invoices', finance.invoice.create);
+    app.put('/invoices/:uuid', finance.invoice.update);
+    app.delete('/invoices/:uuid', finance.invoice.delete);
+    app.get('/invoices', finance.invoice.read);
+    app.get('/invoices/:uuid', finance.invoice.detail);
+    app.get('/invoices/download/excel', finance.invoiceDownload.exportToExcel);
+
+    
     app.post('/cellules', setting.cellule.create);
     app.put('/cellules/:uuid', setting.cellule.update);
     app.delete('/cellules/:uuid', setting.cellule.delete);
     app.get('/cellules', setting.cellule.read);
     app.get('/cellules/:uuid', setting.cellule.detail);
 
-    
     app.post('/pricing', setting.pricing.create);
     app.put('/pricing/:uuid', setting.pricing.update);
     app.get('/pricing', setting.pricing.read);

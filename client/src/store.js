@@ -4,7 +4,7 @@ import AppCache from "./service/appCache";
 
 export default createStore({
   state: {
-    server: process.env.NODE_ENV === 'production' ? '/' : import.meta.env.SERVER_PATH,
+    server: process.env.NODE_ENV === 'production' ? '/' : `http://localhost:${import.meta.env.VITE_APP_API_PORT}/`,
     session: AppCache.get('session'),
     enterprise : AppCache.get('enterprise'),
     order: {

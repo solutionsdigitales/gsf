@@ -38,6 +38,26 @@
           class="label-required"
           :class="{ 'p-error': validationErrors.pricing_uuid && submitted }"
         >
+          {{ $t("FORM.LABELS.INVOICE") }}
+        </label>
+        <Dropdown
+          id="pricing"
+          v-model="selectedInvoice"
+          @change="setInvoice()"
+          :options="invoices"
+          optionLabel="amountLabel"
+          :class="{
+            'p-invalid': validationErrors.invoice_uuid && submitted,
+          }"
+        />
+      </div>
+
+      <div class="p-field">
+        <label
+          for="pricing"
+          class="label-required"
+          :class="{ 'p-error': validationErrors.pricing_uuid && submitted }"
+        >
           {{ $t("FORM.LABELS.OPERATION") }}
         </label>
         <Dropdown
@@ -178,6 +198,7 @@
 import { defineComponent } from "vue";
 
 import PaymentService from "./payment.service";
+import InvoiceService from "../invoice/invoice.service";
 import NotifyService from "../../service/Notify.service";
 import CurrencyService from "../../service/currencyService";
 import priceListService from "../priceList/price.service";
@@ -206,12 +227,14 @@ export default defineComponent({
       selectedCurrency: {},
       validationErrors: {},
       selectedMember: {},
+      selectedInvoice:{},
       selectedPrice: {},
       submitted: false,
       loading: false,
       months: [],
       selectedMonths: [],
       selectedYear: {},
+      invoices:[],
       years: [
         {
           id: 2022,
@@ -238,6 +261,18 @@ export default defineComponent({
     },
   },
   methods: {
+    getInvoices() {
+      const meberUuid = this.selectedMember.uuid;
+      this.invoices = [];
+      InvoiceService.read(null, {
+        member_uuid: meberUuid
+      }).then(invoices => {
+        this.invoices = invoices.map(inv=> {
+          inv.amountLabel = `(${inv.number} - ${inv.date}) ${inv.amount} ${inv.currency_symbol}`;
+          return inv;
+        });
+      })
+    },
     closeDialog() {
       this.submitted = false;
       this.selectedTransaction = {};
@@ -248,8 +283,13 @@ export default defineComponent({
       this.setAmount();
       this.validate();
     },
+    setInvoice() {
+      this.selectedTransaction.invoice_uuid = this.selectedInvoice.uuid;
+      this.validate();
+    },
     setMember() {
       this.selectedTransaction.member_uuid = this.selectedMember.uuid;
+      this.getInvoices();
       this.validate();
     },
     setMonth() {
@@ -292,14 +332,18 @@ export default defineComponent({
       }
       this.loading = true;
       this.selectedTransaction.quantity = 1;
-      this.selectedTransaction.transaction_type = this.selectedPrice.name;
+      if( this.selectedPrice && this.selectedPrice.name) {
+        this.selectedTransaction.transaction_type = this.selectedPrice.name;
+      }
+      
+      if( this.selectedInvoice && this.selectedInvoice.uuid) {
+        this.selectedTransaction.invoice_uuid = this.selectedInvoice.uuid;
+        this.selectedTransaction.transaction_type ='invoice_payment';
+      }
       this.selectedTransaction.payment_method = "CASH";
       this.selectedTransaction.status = "YES";
       this.selectedTransaction.user_id = this.$store.state.session.user.id;
-      this.selectedTransaction.date = util.formatDate(
-        this.selectedTransaction.date,
-        "YYYY-MM-DD"
-      );
+      
       const operation = this.transaction.uuid
         ? PaymentService.update(this.transaction.uuid, this.selectedTransaction)
         : PaymentService.create(this.selectedTransaction);
@@ -351,7 +395,6 @@ export default defineComponent({
       const fields = [
         'currency_id',
         'member_uuid',
-        'pricing_uuid',
         'amount',
         'date',
       ];
