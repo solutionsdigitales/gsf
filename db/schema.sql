@@ -232,8 +232,11 @@ CREATE TABLE `member`(
 CREATE TABLE `invoice`(
   `uuid` BINARY(16) NOT NULL,
   `member_uuid` BINARY(16) NOT NULL,
-  `amount` VARCHAR(100) NOT NULL,
+  `amount` DECIMAL(19, 4) NOT NULL,
+  `amount_equiv` DECIMAL(19, 4) NOT NULL,
+  `rate` DECIMAL(19, 4) NOT NULL DEFAULT 1,
   `currency_id` tinyint(3) unsigned NOT NULL,
+  `number` INTEGER NOT NULL,
   `frequency` VARCHAR(100) NOT NULL,
   `date` DATETIME NOT NULL,
   `created_by` BINARY(16) NOT NULL COMMENT 'user_id',
@@ -257,7 +260,9 @@ CREATE TABLE `pricing`(
 CREATE TABLE `transactions`(
   `uuid` BINARY(16) NOT NULL,
   `amount` DECIMAL(19, 4) NOT NULL,
+  `amount_equiv` DECIMAL(19, 4) NOT NULL,
   `quantity` DECIMAL(19, 4) NOT NULL,
+  `rate` DECIMAL(19, 4) NOT NULL,
   `number` INT NOT NULL,
   `member_uuid` BINARY(16) NOT NULL,
   `pricing_uuid` BINARY(16) NULL,

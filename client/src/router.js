@@ -62,6 +62,12 @@ const routes = [
         name: 'invoice',
         component: () => import('./modules/invoice/registry.vue'),
       },
+       {
+        path: '/exchange_rate',
+        name: 'exchange_rate',
+        component: () => import('./modules/exchange_rate/registry.vue'),
+      },
+      
     ]
   },
   {

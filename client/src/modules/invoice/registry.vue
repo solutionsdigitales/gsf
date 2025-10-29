@@ -41,7 +41,7 @@
         :loading="loading"
       >
         <template #header>
-          {{ $t("TREE.TRANSACTIONS") }}
+          {{ $t("TREE.INVOICE") }}
           <div class="col-12 noLeft">
             <bhFilters
               :filters="latestViewFilters"
@@ -98,10 +98,36 @@
         <Column field="amount" :header="$t('FORM.LABELS.AMOUNT')">
           <template #body="e">
             <div class="text-right w100">
-              {{ e.data.amount }} {{ e.data.currency_symbol }}
+              {{ round(e.data.amount)}} {{ e.data.currency_symbol }}
             </div>
           </template>
         </Column>
+
+         <Column field="amount_equiv" :header="$t('FORM.LABELS.AMOUNT_EQUIV')">
+          <template #body="e">
+            <div class="text-right w100">
+              {{ round(e.data.amount_equiv) }}
+            </div>
+          </template>
+        </Column>
+
+
+         <Column field="paid_amount" :header="$t('FORM.LABELS.PAID_AMOUNT')">
+          <template #body="e">
+            <div class="text-right w100">
+             {{ round(e.data.paid_amount) }}
+            </div>
+          </template>
+        </Column>
+
+        <Column field="left_amount" :header="$t('FORM.LABELS.LEFT_AMOUNT')">
+          <template #body="e">
+            <div class="text-right w100">
+             {{ caculateDiff(e.data.amount_equiv, e.data.paid_amount) }}
+            </div>
+          </template>
+        </Column>
+
         <Column
           field="frequency"
           :header="$t('FORM.LABELS.FREQUENCY')"
@@ -204,6 +230,15 @@ export default {
     }
   },
   methods: {
+    round(val) {
+      if(!val) return val;
+      return UtilService.round(parseFloat(`${val || 0}`));
+    },
+    caculateDiff(val1, val2) {
+      const t1 = parseFloat(`${val1 || 0}`);
+      const t2 = parseFloat(`${val2 || 0}`);
+      return UtilService.round(t1 - t2);
+    },
     getTransaction() {
       this.loading = true;
       const params = this.filters.formatHTTP(true) || {};

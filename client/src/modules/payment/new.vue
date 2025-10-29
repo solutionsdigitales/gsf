@@ -204,7 +204,8 @@ import CurrencyService from "../../service/currencyService";
 import priceListService from "../priceList/price.service";
 import MemberService from "../member/member.service";
 import RateService from "./rate.service";
-import util from "../../service/util";
+import UtilService from '../../service/util';
+
 import constants from "../../service/constant";
 
 export default defineComponent({
@@ -267,8 +268,17 @@ export default defineComponent({
       InvoiceService.read(null, {
         member_uuid: meberUuid
       }).then(invoices => {
-        this.invoices = invoices.map(inv=> {
-          inv.amountLabel = `(${inv.number} - ${inv.date}) ${inv.amount} ${inv.currency_symbol}`;
+
+        this.invoices = invoices.filter((inv) => {
+          const  paidAmount = parseFloat(`${inv.paid_amount || '0'}`);
+          const  AmountEquiv = parseFloat(`${inv.amount_equiv || '0'}`);
+          inv.leftAmount =  AmountEquiv - paidAmount;
+          return inv.leftAmount  > 1;
+        }).map(inv=> {
+          const { currency_id } = this.$store.state.session.enterprise;
+          const amountLeft = CurrencyService.format(inv.leftAmount, currency_id );
+          const amount =  CurrencyService.format(inv.amount, inv.currency_id);
+          inv.amountLabel = `(${inv.number} - ${inv.date}) ${amount}, reste:${amountLeft}`;
           return inv;
         });
       })
@@ -349,12 +359,16 @@ export default defineComponent({
         : PaymentService.create(this.selectedTransaction);
 
       operation
-        .then(() => {
+        .then((res) => {
+          if(res.title && res.title == 'FAILD') {
+            NotifyService.danger(this, "", res.message);
+            return;
+          }
           NotifyService.success(this, "", null);
           this.selectedTransaction = {};
           this.close(true);
         })
-        .catch(() => {
+        .catch((e) => {
           NotifyService.danger(this, "", null);
         })
         .finally(() => {
@@ -362,7 +376,6 @@ export default defineComponent({
         });
     },
     async find() {
-      console.log(this.$store.state.session.user);
       this.selectedMember = {};
       this.selectedCurrency = {};
       this.selectedPrice = {};

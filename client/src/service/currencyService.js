@@ -2,7 +2,7 @@
 import PrototypeApiService from './httpService'
 import AppCache from "./appCache";
 
-function CurrencyService() {
+function _CurrencyService() {
   const baseUrl = '/currencies';
   const service = new PrototypeApiService(baseUrl);
   
@@ -21,5 +21,5 @@ function CurrencyService() {
   return service;
 }
 
-const crr = CurrencyService();
-export default crr;
+const CurrencyService = _CurrencyService();
+export default CurrencyService;

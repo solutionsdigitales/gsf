@@ -38,4 +38,12 @@ INSERT INTO `page` (`code`, `label`, `url`, `isTreeItem`, `module_id`)  VALUES
 ('fin1.001', 'TREE.INVOICE', 'invoice', 1, 3),
 ('fin2.001', 'TREE.PAYMENT', 'payments', 1, 3);
 
+-- le 29/10/2024
 
+INSERT INTO `page` (`code`, `label`, `url`, `isTreeItem`, `module_id`)  VALUES
+('fin3.001', 'TREE.EXCHANGE_RATE', 'exchange_rate', 1, 3);
+
+ALTER TABLE `transactions` ADD COLUMN `rate` DECIMAL(19, 4) NOT NULL DEFAULT 1;
+ALTER TABLE `transactions` ADD COLUMN `amount_equiv` DECIMAL(19, 4) NOT NULL;
+ALTER TABLE `invoice` ADD COLUMN `amount_equiv` DECIMAL(19, 4) NOT NULL;
+ALTER TABLE `invoice` ADD COLUMN `rate` DECIMAL(19, 4) NOT NULL DEFAULT 1;

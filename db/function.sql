@@ -58,4 +58,18 @@ BEGIN
 END $$
 
 
+DROP FUNCTION IF EXISTS INVOICE_PAYMENT $$
+CREATE FUNCTION INVOICE_PAYMENT(invoice_uuid BINARY(16))
+RETURNS DECIMAL(19, 4) DETERMINISTIC
+BEGIN
+  SET @paid_amount = 0.0;
+  SELECT SUM(t.amount_equiv) as amount
+  INTO @paid_amount
+  FROM transactions t
+  WHERE t.invoice_uuid = invoice_uuid;
+  
+  RETURN @paid_amount;
+END $$
+
+
 DELIMITER ;

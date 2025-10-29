@@ -13,7 +13,8 @@ INSERT INTO `page` (`code`, `label`, `url`, `isTreeItem`, `module_id`)  VALUES
 ('conf.003', 'TREE.MEMBERS', 'members', 1, 2),
 ('dash.001', 'TREE.DASHBOARD', 'dashboard', 1, 1),
 ('fin1.001', 'TREE.INVOICE', 'invoice', 1, 3),
-('fin2.001', 'TREE.PAYMENT', 'payments', 1, 3);
+('fin2.001', 'TREE.PAYMENT', 'payments', 1, 3),
+('fin3.001', 'TREE.EXCHANGE_RATE', 'exchange_rate', 1, 3);
 
 
 INSERT INTO`actions` (`id`,`description`) VALUES

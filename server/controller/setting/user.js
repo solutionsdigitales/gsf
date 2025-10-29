@@ -55,9 +55,14 @@ async function authProcess(user, msauthPassKey) {
     user_id: db.bid(user.id),
     text: `connexion (${user.name})`,
   });
-
+  const enterprise = await db.one(`
+    SELECT BUID(uuid) as uuid, 
+      name, currency_id, abbreviation 
+    FROM enterprise
+  `);
   return {
     user,
+    enterprise,
     token: JWTConfig.create(user.id),
     msauthPassKey: msauthPassKey
   };

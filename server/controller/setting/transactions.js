@@ -1,19 +1,23 @@
-
-const db = require('../../lib/db');
-const _ = require('lodash');
-const FilterParser = require('../../lib/filter');
-const util =  require('../../lib/util');
+const db = require("../../lib/db");
+const _ = require("lodash");
+const FilterParser = require("../../lib/filter");
+const util = require("../../lib/util");
 
 // database connection
 const uuidToConvert = [
-  'uuid', 'member_uuid', 'user_id', 'invoice_uuid',
-  'pricing_uuid', 'pricing', 'membre_cellule'
+  "uuid",
+  "member_uuid",
+  "user_id",
+  "invoice_uuid",
+  "pricing_uuid",
+  "pricing",
+  "membre_cellule",
 ];
 
 function read(req, res, next) {
   const options = req.query;
   const rqt = lookUp(options);
-  db.exec(rqt.sql, rqt.params).then(rows => {
+  db.exec(rqt.sql, rqt.params).then((rows) => {
     res.status(200).json(rows);
   }).catch(next);
 }
@@ -22,7 +26,10 @@ function detail(req, res, next) {
   const uuid = db.bid(req.params.uuid);
   const sql = `
     SELECT
-      BUID(t.uuid) AS 'uuid', t.payment_method, t.phone, t.email, t.amount, 
+      BUID(t.uuid) AS 'uuid', t.payment_method, t.phone, t.email,
+      t.amount, 
+      t.amount_equiv,
+      t.rate,
       t.currency,t.currency_id, t.quantity, t.transaction_type,
       IF(t.status='OUI', 1, 0) AS 'status', 
       FORMAT_DATETIME(t.created_at) AS 'created_at',
@@ -30,50 +37,106 @@ function detail(req, res, next) {
       t.date, FORMAT_DATETIME(t.last_update) AS 'last_update'
     FROM transactions t
   `;
-  db.exec(sql, uuid).then(transactions => {
+  db.exec(sql, uuid).then((transactions) => {
     res.status(200).json(transactions);
   }).catch(next);
 }
 
-
 async function getMaxNumber() {
-  const sql = 'SELECT MAX(number) as max_number FROM transactions';
+  const sql = "SELECT MAX(number) as max_number FROM transactions";
   const result = await db.one(sql);
-  return (result.max_number || 0) + 1
+  return (result.max_number || 0) + 1;
 }
+async function getEnterpriseCurrencyid() {
+  const sql = "SELECT currency_id FROM enterprise";
+  const result = await db.one(sql);
+  return result.currency_id;
+}
+async function create(req, res, next) {
+  try {
+    const data = req.body;
 
-function create(req, res, next) {
-  const data = req.body;
-  createProcess(data).then(rows => {
+    const { currency_id } = data;
+    const enterpriseCurrencyId = await getEnterpriseCurrencyid();
+    if (currency_id == enterpriseCurrencyId) {
+      data.rate = 1;
+    } else {
+      const rate = await db.one(
+        `
+          SELECT buy_rate
+          FROM exchange_rate
+          WHERE currency_id = ?
+          ORDER BY date DESC
+          LIMIT 1
+        `,
+        currency_id,
+      );
+      data.rate = rate.buy_rate;
+    }
+    data.amount_equiv = data.amount / data.rate;
+
+    if(data.invoice_uuid) {
+      const invoiceInfo = await db.one(
+        `
+          SELECT  INVOICE_PAYMENT(HUID(?)) as paid_amount  
+        `, data.invoice_uuid
+      );
+
+      const diff = data.amount_equiv - invoiceInfo.paid_amount;
+      if (data.amount_equiv > invoiceInfo.paid_amount) {
+        res.status(200).json({
+          title: "FAILD",
+          status: false,
+          message: "Montant supérieur à la dette"
+        });
+        return;
+      }
+
+      if (diff == 0 || diff < 1) {
+        res.status(200).json({
+          title: "FAILD",
+          status: false,
+          message: "Rien à ajouter"
+        });
+        return;
+      }
+    }
+
+    const rows = await createProcess(data);
     res.status(201).json(rows);
-  }).catch(next);
+  } catch (error) {
+    res.status(500).json({
+      message:"Internal server error",
+      error
+    })
+  }
 }
 
 async function createProcess(data) {
   db.convert(data, uuidToConvert);
-  const sql = 'INSERT INTO transactions SET ?';
-  if(data.months) {
+  const sql = "INSERT INTO transactions SET ?";
+  if (data.months) {
     const months = _.clone(data.months);
     delete data.months;
-    
+
     const transaction = db.transaction();
     const transactionNumber = await getMaxNumber();
     let monthIteration = 0;
-    for(const month of months) {
+    for (const month of months) {
       let _data = Object.assign({}, data);
       _data.uuid = db.bid(db.uuidString());
       _data.number = transactionNumber + monthIteration;
       _data.month = month;
-      _data.amount = data.amount/months.length;
+      _data.amount = data.amount / months.length;
       transaction.addQuery(sql, _data);
       monthIteration++;
     }
     return transaction.execute();
   } else {
-  data.uuid = db.bid(data.uuid ? data.uuid : db.uuidString());
-  data.number = await getMaxNumber();
-  data.date = util.formatDate(data.date, 'YYYY-MM-DD');
-  return db.exec(sql, data);
+    data.uuid = db.bid(data.uuid ? data.uuid : db.uuidString());
+    data.number = await getMaxNumber();
+    data.date = util.formatDate(data.date, "YYYY-MM-DD");
+    return db.exec(sql, data);
   }
 }
 
@@ -81,8 +144,8 @@ function update(req, res, next) {
   const data = req.body;
   const uuid = db.bid(req.params.uuid);
   db.convert(data, uuidToConvert);
-  const sql = 'UPDATE transactions SET ? WHERE uuid = ?';
-  db.exec(sql, [data, uuid]).then(rows => {
+  const sql = "UPDATE transactions SET ? WHERE uuid = ?";
+  db.exec(sql, [data, uuid]).then((rows) => {
     res.status(200).json(rows);
   }).catch(next);
 }
@@ -92,18 +155,21 @@ function remove(req, res, next) {
   const data = {
     locked: 1,
   };
-  const sql = 'UPDATE transactions SET ? WHERE uuid = ?';
-  db.exec(sql, [data, uuid]).then(rows => {
+  const sql = "UPDATE transactions SET ? WHERE uuid = ?";
+  db.exec(sql, [data, uuid]).then((rows) => {
     res.status(200).json(rows);
   }).catch(next);
 }
 
 function lookUp(options) {
   db.convert(options, uuidToConvert);
-  const filters = new FilterParser(options, { tableAlias: 't' });
+  const filters = new FilterParser(options, { tableAlias: "t" });
   const sql = `
     SELECT
-        BUID(t.uuid) AS 'uuid', t.payment_method, t.phone, t.email, t.amount, 
+        BUID(t.uuid) AS 'uuid', t.payment_method, t.phone, t.email,
+        t.amount,
+        t.amount_equiv,
+        t.rate,
         t.currency,t.currency_id, t.quantity, t.transaction_type,
         IF(t.status='OUI', 1, 0) AS 'status',
         t.month, t.year,
@@ -121,46 +187,42 @@ function lookUp(options) {
     LEFT JOIN  user u ON u.id = t.user_id
   `;
 
-  filters.equals('document_uuid');
-  filters.equals('transaction_type');
-  filters.equals('reference');
-  filters.equals('payment_mode');
-  filters.equals('currency');
-  filters.equals('locked');
-  filters.equals('number');
-  filters.custom('pricing', 't.pricing_uuid = ?');
-  filters.equals('phone');
-  filters.equals('year');
-  filters.equals('month');
-  filters.custom('membre_number', 'm.number = ?');
-  filters.custom('membre_cellule', 'm.cellule_uuid = ?');
-  
-  filters.custom('member_uuid', 'm.uuid=?');
-  filters.setOrder(' ORDER BY t.number DESC');
+  filters.equals("document_uuid");
+  filters.equals("transaction_type");
+  filters.equals("reference");
+  filters.equals("payment_mode");
+  filters.equals("currency");
+  filters.equals("locked");
+  filters.equals("number");
+  filters.custom("pricing", "t.pricing_uuid = ?");
+  filters.equals("phone");
+  filters.equals("year");
+  filters.equals("month");
+  filters.custom("membre_number", "m.number = ?");
+  filters.custom("membre_cellule", "m.cellule_uuid = ?");
+
+  filters.custom("member_uuid", "m.uuid=?");
+  filters.setOrder(" ORDER BY t.number DESC");
 
   return {
     sql: filters.applyQuery(sql),
     params: filters.parameters(),
-  }
+  };
 }
-
-
 
 function summery(req, res, next) {
   const sql = `
-    SELECT transaction_type, SUM(amount) AS 'amount', currency
+    SELECT transaction_type, SUM(amount_equiv) AS 'amount', currency
     FROM transactions
     WHERE transactions.locked = 0 
     GROUP BY transaction_type, currency
     ORDER BY transaction_type;
   `;
 
-  db.exec(sql).then(results => {
+  db.exec(sql).then((results) => {
     res.status(200).json(results);
   }).catch(next);
-
 }
-
 
 // delete a member
 function count(req, res, next) {
@@ -172,7 +234,13 @@ function count(req, res, next) {
   }).catch(next);
 }
 
-
 module.exports = {
-  read, create, update, detail, lookUp, delete : remove, summery, count
-}
+  read,
+  create,
+  update,
+  detail,
+  lookUp,
+  delete: remove,
+  summery,
+  count,
+};
