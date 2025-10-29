@@ -17,6 +17,7 @@ services:
       - --sql-mode=STRICT_ALL_TABLES,NO_UNSIGNED_SUBTRACTION
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+      - --log-bin-trust-function-creators=1
     volumes:
       - ./mysql_data:/var/lib/mysql
       - ./db:/opt/db/
