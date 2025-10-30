@@ -1,7 +1,7 @@
 INSERT INTO `modules` (`id`, `label`, `description`, `icon`) VALUES
 (1, 'TREE.DASHBOARD', 'Dashboard', 'pi pi-fw pi-home'),
 (2, 'TREE.SETTING', 'Setting', 'pi pi-cogs'),
-(3, 'TREE.FINANCE', 'FINANCE', 'pi pi-file'),
+(3, 'TREE.FINANCE', 'FINANCE', 'pi pi-file');
 
 
 
